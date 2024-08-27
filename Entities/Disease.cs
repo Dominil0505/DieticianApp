@@ -9,5 +9,8 @@ namespace DieticianApp.Entities
 
         public string? Disease_Name{ get; set; }
         public string? Diagnosis_Date { get; set; }
+
+        // Relation
+        public ICollection<Patient> Patients { get; set; }
     }
 }

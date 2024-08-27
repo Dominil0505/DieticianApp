@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DieticianApp.Entities
 {
@@ -17,7 +18,16 @@ namespace DieticianApp.Entities
         public DateTime Created_At { get; set; } = DateTime.Now;
         public DateTime? Updated_At { get; set; }
 
+        // Foreign Keys
+        public int Dietician_Id { get; set; }
+        public int Patient_Id{ get; set; }
+
         // Relation
-        
+        [ForeignKey("Dietician_Id")]
+        public Dietician Dietician { get; set; }
+
+        [ForeignKey("Patient_Id")]
+        public Patient Patient { get; set; }
+
     }
 }

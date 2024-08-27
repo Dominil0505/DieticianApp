@@ -24,6 +24,9 @@ namespace DieticianApp.Entities
 
         [Required(ErrorMessage = "Carbohydrate is required")]
         public int? Carbohydrate { get; set; }
+
+        // Relation
+        public ICollection<Food> Foods { get; set; }
     }
 }
 

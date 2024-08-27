@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DieticianApp.Entities
 {
@@ -16,5 +17,9 @@ namespace DieticianApp.Entities
         public int? Protein{ get; set; }
         public int? Fat{ get; set; }
         public int? Carbohydrate { get; set; }
+       
+        // Relations
+        public ICollection<Allergy> Allergies { get; set; }
+        public ICollection<Ingredient> Ingredients { get; set;}
     }
 }

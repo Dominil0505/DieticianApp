@@ -28,10 +28,12 @@ namespace DieticianApp.Entities
         [StringLength(255, MinimumLength = 2)]
         public string? Description{ get; set; }
         public string? Mobile {  get; set; }
-        public string? Role { get; set; }
+        public string? Role { get; set; } = "Dietician";
         public DateTime Created_At { get; set; } = DateTime.Now;
         public DateTime? Updated_At { get; set; }
 
-        // Relation
+        // Relations
+        public ICollection<Patient> Patients { get; set; }
+        public ICollection<Menu> Menus { get; set; }
     }
 }

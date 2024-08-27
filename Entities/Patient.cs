@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DieticianApp.Entities
 {
@@ -29,11 +30,18 @@ namespace DieticianApp.Entities
         public byte? Height{ get; set; }
         public short? Weight{ get; set; }
         public string? Gender{ get; set; }
-        public string? Role{ get; set; }
+        public string? Role { get; set; } = "Patient";
         public DateTime Created_At{ get; set; } = DateTime.Now;
         public DateTime? Updated_At { get; set; }
 
         // Relation
+        [ForeignKey("Dietician_Id")]
+        public Dietician Dietician { get; set; }
 
+        public Menu Menu { get; set; }
+
+        public ICollection<Disease> Diseases { get; set; }
+        public ICollection<Medicine> Medicines { get; set; }
+        public ICollection<Allergy> Allergy { get; set; }
     }
 }

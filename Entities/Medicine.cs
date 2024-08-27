@@ -7,5 +7,8 @@ namespace DieticianApp.Entities
         [Key]
         public int Medicine_Id{ get; set; }
         public string? Medicine_Name{ get; set; }
+
+        // Relation
+        public ICollection<Patient> Patients { get; set; }
     }
 }
