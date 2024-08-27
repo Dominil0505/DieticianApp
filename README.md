@@ -1,4 +1,8 @@
 # DietitianApp
+## Ötlet - Idea
+- Az ötlet az volt hogy készíteni akarok egy szoftvert ahol egy dietetikus tudja kezelni az étrendeket, látja a pácienseit.
+- A dietetikus tud készíteni adott menüket (reggeli, ebéd stb..) tud felvenni ételeket, hozzávalókat amiket az elején felkell venni de azután ami már felvan véve azt ki lehet választani egyböl számolja a kaloriát fehérjét stb...
+- Kell egy adminisztátor aki felveszi a pácienseket és hozzárendeli a dietetikushoz  !!! 
 
 # Database Design
 ## Adatbázis táblák - Database tables

@@ -19,7 +19,7 @@ namespace DieticianApp.Entities
         public int? Carbohydrate { get; set; }
        
         // Relations
-        public ICollection<Allergy> Allergies { get; set; }
-        public ICollection<Ingredient> Ingredients { get; set;}
+        public ICollection<Allergy>? Allergies { get; set; }
+        public ICollection<Ingredient>? Ingredients { get; set;}
     }
 }

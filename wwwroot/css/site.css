@@ -8,8 +8,11 @@ html {
   }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #9DC88D;
+}
+.form-control:focus, .form-check-input:focus {
+    box-shadow: none !important;
 }
 
 html {
@@ -18,5 +21,16 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    background-color: #F8F9Fa;
+}
+
+.auth-input {
+    border-left: 3px solid #9DC88D;
+    margin-bottom: 0;
+    background-color: #ffffff;
+}
+
+input:focus {
+    border: 2px solid #9DC88D!important;
 }

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DieticianApp.Entities
 {
-    [Index(nameof(Dietician_Name), IsUnique = true)]
+    [Index(nameof(Dietician_Name))]
     [Index(nameof(Dietician_Email), IsUnique = true)]
 
     public class Dietician
@@ -20,7 +20,7 @@ namespace DieticianApp.Entities
 
         [Required(ErrorMessage = "Password is required")]
         [DataType(DataType.Password)]
-        [StringLength(50, MinimumLength = 6)]
+        [StringLength(255)]
         public string? Password { get; set; }
 
         public string? AvatarUrL { get; set; }
@@ -33,7 +33,7 @@ namespace DieticianApp.Entities
         public DateTime? Updated_At { get; set; }
 
         // Relations
-        public ICollection<Patient> Patients { get; set; }
-        public ICollection<Menu> Menus { get; set; }
+        public ICollection<Patient>? Patients { get; set; }
+        public ICollection<Menu>? Menus { get; set; }
     }
 }

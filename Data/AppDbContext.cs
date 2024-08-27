@@ -1,5 +1,6 @@
 ﻿using DieticianApp.Entities;
 using Microsoft.EntityFrameworkCore;
+using DieticianApp.Models;
 
 namespace DieticianApp.Data
 {
@@ -22,5 +23,7 @@ namespace DieticianApp.Data
         {
             base.OnModelCreating(modelBuilder);
         }
+        public DbSet<DieticianApp.Models.RegisterViewModel> RegisterViewModel { get; set; } = default!;
+        public DbSet<DieticianApp.Models.LoginViewModel> LoginViewModel { get; set; } = default!;
     }
 }

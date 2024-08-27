@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DieticianApp.Entities
 {
-    [Index(nameof(Patient_Name), IsUnique = true)]
+    [Index(nameof(Patient_Name))]
     [Index(nameof(Patient_Email), IsUnique = true)]
 
     public class Patient
@@ -36,12 +36,12 @@ namespace DieticianApp.Entities
 
         // Relation
         [ForeignKey("Dietician_Id")]
-        public Dietician Dietician { get; set; }
+        public Dietician? Dietician { get; set; }
 
-        public Menu Menu { get; set; }
+        public Menu? Menu { get; set; }
 
-        public ICollection<Disease> Diseases { get; set; }
-        public ICollection<Medicine> Medicines { get; set; }
-        public ICollection<Allergy> Allergy { get; set; }
+        public ICollection<Disease>? Diseases { get; set; }
+        public ICollection<Medicine>? Medicines { get; set; }
+        public ICollection<Allergy>? Allergy { get; set; }
     }
 }

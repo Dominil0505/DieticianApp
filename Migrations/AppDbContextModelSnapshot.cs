@@ -61,9 +61,13 @@ namespace DieticianApp.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Allergy_Id"));
 
                     b.Property<string>("Allergy_Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Allergy_Id");
+
+                    b.HasIndex("Allergy_Name")
+                        .IsUnique()
+                        .HasFilter("[Allergy_Name] IS NOT NULL");
 
                     b.ToTable("Allergy");
                 });
@@ -99,8 +103,8 @@ namespace DieticianApp.Migrations
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("Role")
                         .HasColumnType("nvarchar(max)");
@@ -113,8 +117,7 @@ namespace DieticianApp.Migrations
                     b.HasIndex("Dietician_Email")
                         .IsUnique();
 
-                    b.HasIndex("Dietician_Name")
-                        .IsUnique();
+                    b.HasIndex("Dietician_Name");
 
                     b.ToTable("Dieticians");
                 });
@@ -131,9 +134,13 @@ namespace DieticianApp.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Disease_Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Disease_Id");
+
+                    b.HasIndex("Disease_Name")
+                        .IsUnique()
+                        .HasFilter("[Disease_Name] IS NOT NULL");
 
                     b.ToTable("Diseases");
                 });
@@ -217,9 +224,13 @@ namespace DieticianApp.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Medicine_Id"));
 
                     b.Property<string>("Medicine_Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Medicine_Id");
+
+                    b.HasIndex("Medicine_Name")
+                        .IsUnique()
+                        .HasFilter("[Medicine_Name] IS NOT NULL");
 
                     b.ToTable("Medicines");
                 });
@@ -241,10 +252,10 @@ namespace DieticianApp.Migrations
                     b.Property<string>("Created_by")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Dietician_Id")
+                    b.Property<int?>("Dietician_Id")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("Menu_End")
+                    b.Property<DateTime?>("Menu_End")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Menu_Name")
@@ -252,10 +263,10 @@ namespace DieticianApp.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<DateTime>("Menu_Start")
+                    b.Property<DateTime?>("Menu_Start")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Patient_Id")
+                    b.Property<int?>("Patient_Id")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("Updated_At")
@@ -265,8 +276,12 @@ namespace DieticianApp.Migrations
 
                     b.HasIndex("Dietician_Id");
 
-                    b.HasIndex("Patient_Id")
+                    b.HasIndex("Menu_Name")
                         .IsUnique();
+
+                    b.HasIndex("Patient_Id")
+                        .IsUnique()
+                        .HasFilter("[Patient_Id] IS NOT NULL");
 
                     b.ToTable("Menus");
                 });
@@ -289,7 +304,7 @@ namespace DieticianApp.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Dietician_Id")
+                    b.Property<int?>("Dietician_Id")
                         .HasColumnType("int");
 
                     b.Property<string>("Gender")
@@ -329,10 +344,60 @@ namespace DieticianApp.Migrations
                     b.HasIndex("Patient_Email")
                         .IsUnique();
 
-                    b.HasIndex("Patient_Name")
-                        .IsUnique();
+                    b.HasIndex("Patient_Name");
 
                     b.ToTable("Patients");
+                });
+
+            modelBuilder.Entity("DieticianApp.Models.LoginViewModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LoginViewModel");
+                });
+
+            modelBuilder.Entity("DieticianApp.Models.RegisterViewModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ConfirmPassword")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RegisterViewModel");
                 });
 
             modelBuilder.Entity("DiseasePatient", b =>
@@ -414,15 +479,11 @@ namespace DieticianApp.Migrations
                 {
                     b.HasOne("DieticianApp.Entities.Dietician", "Dietician")
                         .WithMany("Menus")
-                        .HasForeignKey("Dietician_Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("Dietician_Id");
 
                     b.HasOne("DieticianApp.Entities.Patient", "Patient")
                         .WithOne("Menu")
-                        .HasForeignKey("DieticianApp.Entities.Menu", "Patient_Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DieticianApp.Entities.Menu", "Patient_Id");
 
                     b.Navigation("Dietician");
 
@@ -433,9 +494,7 @@ namespace DieticianApp.Migrations
                 {
                     b.HasOne("DieticianApp.Entities.Dietician", "Dietician")
                         .WithMany("Patients")
-                        .HasForeignKey("Dietician_Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("Dietician_Id");
 
                     b.Navigation("Dietician");
                 });
@@ -494,8 +553,7 @@ namespace DieticianApp.Migrations
 
             modelBuilder.Entity("DieticianApp.Entities.Patient", b =>
                 {
-                    b.Navigation("Menu")
-                        .IsRequired();
+                    b.Navigation("Menu");
                 });
 #pragma warning restore 612, 618
         }

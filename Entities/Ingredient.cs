@@ -26,7 +26,7 @@ namespace DieticianApp.Entities
         public int? Carbohydrate { get; set; }
 
         // Relation
-        public ICollection<Food> Foods { get; set; }
+        public ICollection<Food>? Foods { get; set; }
     }
 }
 

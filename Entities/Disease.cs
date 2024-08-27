@@ -1,7 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace DieticianApp.Entities
 {
+    [Index(nameof(Disease_Name), IsUnique = true)]
     public class Disease
     {
         [Key]
@@ -11,6 +13,6 @@ namespace DieticianApp.Entities
         public string? Diagnosis_Date { get; set; }
 
         // Relation
-        public ICollection<Patient> Patients { get; set; }
+        public ICollection<Patient>? Patients { get; set; }
     }
 }
