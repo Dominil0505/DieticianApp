@@ -1,0 +1,139 @@
+﻿@model DieticianApp.Models.ViewModel.AdminFunctions.AddAllergyViewModel
+
+<div class="container">
+    <div class="row py-5">
+        <div class="col-xl-10">
+            <div class="bg-light rounded mb-4">
+                <div class="row g-2">
+                    <div class="col">
+                        <form>
+                            <select class="form-select">
+                                <option>Sort</option>
+                                <option>Descading</option>
+                                <option>Asceding</option>
+                            </select>
+                        </form>
+                    </div>
+                    <div class="col">
+                        <form>
+                            <div class="input-group overflow-hidden">
+                                <input type="text" class="form-control" placeholder="Search ....">
+                                <span class="input-group-text auth-input"><a href=""><i class="fa-solid fa-magnifying-glass"></a></i></span>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                            Add new Allergy
+                        </button>
+                        <span asp-validation-for="AllergyName" class="text-danger"></span>
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Add new Allergy</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <form asp-controller="AdminFunctions" asp-action="AddAllergy" method="post">
+                                        <div class="modal-body">
+                                            <label class="form-label">Allergy name: </label>
+                                            <input class="form-control" asp-for="AllergyName" />
+                                        </div>
+                                        <div class="modal-footer justify-content-center">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary" id="addToast">Add</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Allergy name</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                    @if (Model.Allergies != null && Model.Allergies.Any())
+                    {
+                        foreach (var allergy in Model.Allergies)
+                        {
+                            <tr>
+                                <th scope="row">@allergy.Allergy_Id</th>
+                                <td>@allergy.Allergy_Name</td>
+                                <td>
+                                    <form asp-action="DeleteAllergy" asp-controller="AdminFunctions" method="post" asp-route-id="@allergy.Allergy_Id">
+                                        <button class="btn btn-danger" id="deleteToast" type="submit"><i class="fa-solid fa-trash"></i></button>
+                                    </form>
+                                    
+                                    <a asp-action="EditAllergy" asp-controller="AdminFunctions" class="text-primary"><i class="fa-solid fa-pen"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="3">No allergies found.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            var deleteToastEl = document.getElementById('deleteToast');
+            var addToastEl = document.getElementById('addToast');
+
+            if (deleteToastEl && @Html.Raw(Json.Serialize(TempData["Message"] != null))) {
+                var deleteToast = new bootstrap.Toast(deleteToastEl);
+                deleteToast.show();
+            }
+
+            if (addToastEl && @Html.Raw(Json.Serialize(ViewBag.Message != null))) {
+                var addToast = new bootstrap.Toast(addToastEl);
+                addToast.show();
+            }
+        });
+
+    </script>
+}
+
+ <div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="deleteToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <strong class="me-auto">Notification</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body" style="background-color: red; color: white;">
+            @if (TempData["Message"] != null)
+            {
+                @TempData["Message"]
+            }
+        </div>
+    </div>
+</div>
+
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="addToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <strong class="me-auto">Notification</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body" style="background-color: red; color: white;">
+            <div class="text-success py-3">@ViewBag.Message</div>
+        </div>
+    </div>
+</div>

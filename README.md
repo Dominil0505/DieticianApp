@@ -23,3 +23,13 @@
 - patient_medicine (patient_id, medicine_id) -> egy pácienshez tartozhat több gyógyszer amit szed és egy gyógyszer tartozhat több pácienshez N:M 
 - patient_allergy (patient_id, allergy_id) -> egy pácienshez tartozhat több allergia és egy allergia tartozhat több pácienshez N:M
 - food_ingredients (food_id, ingredients_id) -> egy ételhez tartozhat több hozzávaló és egy hozzávaló tartozhat több ételhez N:M
+
+## Relációk Megtervezése
+Dietetician -> Patient: Egy dietetikusnak több páciense is lehet, de egy pácienshez csak egy dietetikus tartozhat. Ez egy egy-a-többhöz kapcsolat.
+- Dietician_Id lesz az idegen kulcs a Patient táblában.
+
+Patient -> Menu: Egy páciensnek több étrendje lehet, de egy étrend csak egy pácienshez tartozhat. Ez szintén egy egy-a-többhöz kapcsolat.
+- Patient_Id lesz az idegen kulcs a Menu táblában.
+
+Dietetician -> Menu: Egy dietetikus több étrendet is készíthet, de egy étrend csak egy dietetikushoz tartozhat. Ez egy másik egy-a-többhöz kapcsolat.
+- Dietician_Id lesz az idegen kulcs a Menu táblában.

@@ -1,4 +1,9 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿const toastTrigger = document.getElementById('liveToastBtn')
+const toastLiveExample = document.getElementById('deleteToast')
+if (toastTrigger) {
+    toastTrigger.addEventListener('click', () => {
+        const toast = new bootstrap.Toast(toastLiveExample)
 
-// Write your JavaScript code.
+        toast.show()
+    })
+}

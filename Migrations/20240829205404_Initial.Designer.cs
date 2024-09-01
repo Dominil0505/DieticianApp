@@ -4,6 +4,7 @@ using DieticianApp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DieticianApp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240829205404_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -335,7 +338,7 @@ namespace DieticianApp.Migrations
 
                     b.HasIndex("DiseaseId");
 
-                    b.ToTable("Patient_Diseases");
+                    b.ToTable("Patient_Disease");
                 });
 
             modelBuilder.Entity("DieticianApp.Models.JoinTables.Patient_Medication", b =>
@@ -350,7 +353,7 @@ namespace DieticianApp.Migrations
 
                     b.HasIndex("MedicationId");
 
-                    b.ToTable("patient_Medications");
+                    b.ToTable("Patient_Medication");
                 });
 
             modelBuilder.Entity("DieticianApp.Models.JoinTables.User_Roles", b =>
@@ -437,9 +440,9 @@ namespace DieticianApp.Migrations
                     b.Property<int?>("Dietician_Id")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("DoB")
+                    b.Property<string>("DoB")
                         .HasMaxLength(110)
-                        .HasColumnType("datetime2");
+                        .HasColumnType("nvarchar(110)");
 
                     b.Property<string>("Gender")
                         .HasColumnType("nvarchar(max)");

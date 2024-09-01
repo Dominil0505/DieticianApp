@@ -1,12 +1,14 @@
 ﻿using DieticianApp.Data;
 using Microsoft.AspNetCore.Mvc;
-using DieticianApp.Entities;
-using DieticianApp.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using System.Configuration;
+using DieticianApp.Models.Entities;
+using DieticianApp.Models.JoinTables;
+using DieticianApp.Models.ViewModel;
 
 namespace DieticianApp.Controllers
 {
@@ -24,62 +26,100 @@ namespace DieticianApp.Controllers
             return View();
         }
 
-        public IActionResult RegistrationDietician()
+        public IActionResult Registration()
         {
             return View();
         }
 
-        public IActionResult LoginDietician()
+        public IActionResult Login()
         {
             return View();
         }
 
-        public IActionResult RegistrationPatient()
-        {
-            return View();
-        }
-
-        public IActionResult LoginPatient()
-        {
-            return View();
-        }
 
         [HttpPost]
-        public IActionResult RegistrationDietician(RegisterViewModel model)
+        public async Task<IActionResult> Registration(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
-                
-                Dietician dietician = new Dietician();
-                dietician.Dietician_Email = model.Email;
-                dietician.Dietician_Name = model.Name;
-                dietician.Password = BCrypt.Net.BCrypt.EnhancedHashPassword(model.Password);
+                var isUserUsed = await _context.Users.Where(_ => _.Email == model.Email).FirstOrDefaultAsync();
 
-                if(dietician.Password is null)
+                if (isUserUsed != null)
                 {
-                    ModelState.AddModelError("", "The password is null.");
+                    ModelState.AddModelError("", "The email address is already in use.");
                 }
-                try
+                else
                 {
-                    _context.Dieticians.Add(dietician);
-                    _context.SaveChanges();
+                    if (model.Role == "Dietician" || model.Role == "Patient" || model.Role == "Admin")
+                    {
+                        Users user = new Users(model.Name, BCrypt.Net.BCrypt.EnhancedHashPassword(model.Password), model.Email);
+                        _context.Users.Add(user);
+                        _context.SaveChanges();
 
-                    ModelState.Clear();
-                    ViewBag.Message = $"{dietician.Dietician_Name} registered successfully. Please login";
-                }
-                catch (DbUpdateException ex)
-                {
-                    var user = _context.Dieticians.Where(_ => _.Dietician_Email == model.Email).FirstOrDefault();
-                    if(user is not null) 
-                    { 
-                        ModelState.AddModelError("", "The email address is already in use."); 
+                        if (model.Role == "Dietician")
+                        {
+                            try
+                            {
+                                var role = _context.Roles.Where(_ => _.Role_Name == "Dietician").FirstOrDefault();
+                                Dieticians dietician = new Dieticians(user.User_Id);
+                                User_Roles user_roles = new User_Roles(user.User_Id, role.Role_Id);
+
+                                _context.Dieticians.Add(dietician);
+                                _context.User_Roles.Add(user_roles);
+                                _context.SaveChanges();
+                                ViewBag.Message = $"{user.User_Name} registered successfully. Please login";
+                            }
+                            catch(DbUpdateException e) 
+                            {
+                                ModelState.AddModelError("", $"Something is wrong: ->  {e.Message}");
+                            }
+                            
+                        }
+                        else if (model.Role == "Patient")
+                        {
+                            try
+                            {
+                                var role = _context.Roles.Where(_ => _.Role_Name == "Patient").FirstOrDefault();
+                                Patients patient = new Patients(user.User_Id);
+                                User_Roles user_roles = new User_Roles(user.User_Id, role.Role_Id);
+
+                                _context.Patients.Add(patient);
+                                _context.User_Roles.Add(user_roles);
+                                _context.SaveChanges();
+                                ViewBag.Message = $"{user.User_Name} registered successfully. Please login";
+                            }
+                            catch (DbUpdateException e)
+                            {
+                                ModelState.AddModelError("", $"Something is wrong: ->  {e.Message}");
+                            }
+                            
+                        }
+                        else if (model.Role == "Admin")
+                        {
+                            try
+                            {
+                                var role = _context.Roles.Where(_ => _.Role_Name == "Admin").FirstOrDefault();
+                                Admins admin = new Admins(user.User_Id);
+                                User_Roles user_roles = new User_Roles(user.User_Id, role.Role_Id);
+
+                                _context.Admins.Add(admin);
+                                _context.User_Roles.Add(user_roles);
+                                _context.SaveChanges();
+                                ModelState.Clear();
+                                ViewBag.Message = $"{user.User_Name} registered successfully. Please login";
+                            }
+                            catch (DbUpdateException e)
+                            {
+                                ModelState.AddModelError("", $"Something is wrong: ->  {e.Message}");
+                            }   
+                        }
                     }
+
                     else
                     {
-                        ModelState.AddModelError("", "An error occurred while processing your request.\n" + ex.Message);
+                        ModelState.AddModelError("", "Youre chosen role is not avaliable! Please chosee another one");
                     }
-                    //ModelState.AddModelError("", "Please enter unique Email");
-                    return View(model);
+
                 }
 
                 return View();
@@ -89,25 +129,36 @@ namespace DieticianApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult LoginDietician(LoginViewModel model) 
+        public async Task <IActionResult> Login(LoginViewModel model)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                var dietician = _context.Dieticians.Where(_ => _.Dietician_Email == model.Email).FirstOrDefault();
 
-                if(dietician is not null && BCrypt.Net.BCrypt.EnhancedVerify(model.Password, dietician.Password))
+                var user = await _context.Users
+                    .Include(u => u.UserRoles)
+                        .ThenInclude(ur => ur.Role)
+                    .Where(_ => _.Email == model.Email)
+                    .FirstOrDefaultAsync();
+
+                if (user != null && BCrypt.Net.BCrypt.EnhancedVerify(model.Password, user.Password))
                 {
                     // Create cookies
 
                     var claims = new List<Claim>
                     {
-                        new Claim(ClaimTypes.Name, dietician.Dietician_Name),
-                        new Claim("Name", dietician.Dietician_Name),
-                        new Claim(ClaimTypes.Role, "Dietician")
+                        new Claim(ClaimTypes.Name, user.User_Name),
+                        new Claim("Name", user.User_Name),
+                        new Claim(ClaimTypes.Email, user.Email),
+                        new Claim("Email", user.User_Name),
                     };
 
+                    foreach (var userRole in user.UserRoles)
+                    {
+                        claims.Add(new Claim(ClaimTypes.Role, userRole.Role.Role_Name));
+                    }
+
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                    HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
 
                     return RedirectToAction("SecurePage");
                 }
@@ -120,76 +171,9 @@ namespace DieticianApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult RegistrationPatient(RegisterViewModel model)
+        public async Task<IActionResult> Logout()
         {
-            if (ModelState.IsValid) 
-            {
-                Patient patient = new Patient();
-                patient.Patient_Email = model.Email;
-                patient.Patient_Name = model.Name;
-                patient.Password = BCrypt.Net.BCrypt.EnhancedHashPassword(model.Password);
-
-
-                try
-                {
-                    _context.Add(patient);
-                    _context.SaveChanges();
-
-                    ModelState.Clear();
-                    ViewBag.Message = $"{patient.Patient_Name} registered successfully. Please login";
-                }
-                catch (DbUpdateException ex)
-                {
-                    var user = _context.Patients.Where(_ => _.Patient_Email == model.Email).FirstOrDefault();
-                    if (user is not null)
-                    {
-                        ModelState.AddModelError("", "The email address is already in use.");
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("", "An error occurred while processing your request.\n" + ex.Message);
-                    }
-                    //ModelState.AddModelError("", "Please enter unique Email");
-                    return View(model);
-                }
-            }
-            return View(model);
-        }
-
-        [HttpPost]
-        public IActionResult LoginPatient(LoginViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var patient = _context.Patients.Where(_ => _.Patient_Email == model.Email).FirstOrDefault();
-
-                if(patient is not null && BCrypt.Net.BCrypt.EnhancedVerify(model.Password, patient.Password))
-                {
-                    var claims = new List<Claim>
-                    {
-                        new Claim(ClaimTypes.Name, patient.Patient_Name),
-                        new Claim("Name", patient.Patient_Name),
-                        new Claim(ClaimTypes.Role, "Patient")
-                    };
-
-                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                    HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
-
-                    return RedirectToAction("");
-                }
-                else
-                {
-                    ModelState.AddModelError("", "Username or Password is not correct");
-                }
-            }
-
-            return View(model);
-        }
-
-        [HttpPost]
-        public IActionResult Logout() 
-        {
-            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Index", "Home");
         }
 
@@ -199,5 +183,7 @@ namespace DieticianApp.Controllers
             ViewBag.Name = HttpContext.User.Identity.Name;
             return View();
         }
+
+
     }
 }

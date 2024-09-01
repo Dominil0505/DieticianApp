@@ -1,4 +1,4 @@
-using DietitianApp.Models;
+using DieticianApp.Models.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 

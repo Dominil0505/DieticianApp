@@ -1,0 +1,125 @@
+﻿@model DieticianApp.Models.ViewModel.Profile.PatientProfileViewModel
+@await Html.PartialAsync("Profile")
+
+<div class="row py-5">
+    <div class="col-xl-3">
+        <div class="card">
+            <div class="card-header">
+                <h3>Doctor: </h3>
+            </div>
+            <div class="card-body">
+                
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-9">
+        <div class="card mb-3">
+            <div class="card-body">
+                <ul class="nav nav-pills gap-2 flex-grow-1 mb-0" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link custom-link fs-md active" data-bs-toggle="tab" role="tab" aria-selected="true" href="#personalDetails">Personal Details</a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" href="#changePassword" data-bs-toggle="tab" role="tab" aria-selected="false" tabindex="-1">Change Password</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="card">
+            <div class="tab-content">
+                <div class="tab-pane active" id="personalDetails" role="tabpanel">
+                    <div class="card-header">
+                        <h6 class="card-title mb-0">Personal Details</h6>
+                    </div>
+                    <div class="card-body">
+                        <form asp-action="EditPatient">
+                            <div class="row">
+                                <div class="col-lg-6 mb-3">
+                                    <label class="form-label">Username</label>
+                                    <input asp-for="Username" type="text" class="form-control" placeholder="Enter new name">
+                                    <span asp-validation-for="Username" class="text-danger"></span>
+                                </div>
+                                <div class="col-lg-6 mb-3">
+                                    <label class="form-label">Birthday</label>
+                                    <input asp-for="DoB" type="date" class="form-control" />
+                                    <span asp-validation-for="DoB" class="text-danger"></span>
+                                </div>
+                                <div class="col-lg-6 mb-3">
+                                    <label class="form-label">Gender</label>
+                                    <select class="form-select" asp-for="Gender">
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                    </select>
+                                    <span asp-validation-for="Gender" class="text-danger"></span>
+                                </div>
+                                <div class="col-lg-6 mb-3">
+                                    <label class="form-label">Height (cm)</label>
+                                    <input asp-for="Height" type="number" class="form-control" placeholder="158" />
+                                    <span asp-validation-for="Height" class="text-danger"></span>
+                                </div>
+                                <div class="col-lg-6 mb-3">
+                                    <div class="mb-3">
+                                        <label class="form-label">Weight (kg)</label>
+                                        <input asp-for="Weight" type="number" class="form-control" placeholder="68" />
+                                        <span asp-validation-for="Weight" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 mb-3">
+                                    <label class="form-label">Allergies</label>
+                                    <select class="form-select" asp-for="SelectedAllergyIds">
+                                        <option value="Laktóz">Laktóz</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-6 mb-3">
+                                    <div class="form-floating">
+                                        <textarea asp-for="Disease" class="form-control" id="floatingTextarea"></textarea>
+                                        <label for="floatingTextarea">Disease</label>
+                                        <span asp-validation-for="Disease" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 mb-3">
+                                    <div class="form-floating">
+                                        <textarea asp-for="Medication" class="form-control" id="floatingTextarea"></textarea>
+                                        <label for="floatingTextarea">Medications</label>
+                                        <span asp-validation-for="Medication" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary" type="submit">Save</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="tab-pane" id="changePassword" role="tabpanel">
+                    <div class="card-header">
+                        <h6 class="card-title mb-0">Change Password</h6>
+                    </div>
+                    <div class="card-body">
+                        <form asp-action="ChangePassword">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Password</label>
+                                        <input type="password" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Confirm Password</label>
+                                        <input type="password" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary" type="submit">Save</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

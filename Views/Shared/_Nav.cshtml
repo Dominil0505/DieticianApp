@@ -1,0 +1,14 @@
+﻿@if (Context.User.Identity.Name != null)
+{
+    @await Html.PartialAsync("_Sidebar")
+}
+
+
+<nav class="navbar navbar-expand-lg @(Context.User.Identity.Name != null ? "navbar-custom" : "")">
+    <div class="container-fluid">
+        <a class="navbar-brand" asp-controller="Home" asp-action="Index">
+            <img width="48" height="48" src="https://img.icons8.com/fluency/96/healthy-food-calories-calculator.png" alt="healthy-food-calories-calculator" />
+        </a>
+        @await Html.PartialAsync("_LoginPartial")
+    </div>
+</nav>
