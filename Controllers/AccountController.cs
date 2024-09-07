@@ -99,14 +99,22 @@ namespace DieticianApp.Controllers
                             try
                             {
                                 var role = _context.Roles.Where(_ => _.Role_Name == "Admin").FirstOrDefault();
-                                Admins admin = new Admins(user.User_Id);
-                                User_Roles user_roles = new User_Roles(user.User_Id, role.Role_Id);
+                                if (role != null) 
+                                {
+                                    Admins admin = new Admins(user.User_Id);
+                                    User_Roles user_roles = new User_Roles(user.User_Id, role.Role_Id);
 
-                                _context.Admins.Add(admin);
-                                _context.User_Roles.Add(user_roles);
-                                _context.SaveChanges();
-                                ModelState.Clear();
-                                ViewBag.Message = $"{user.User_Name} registered successfully. Please login";
+                                    _context.Admins.Add(admin);
+                                    _context.User_Roles.Add(user_roles);
+                                    _context.SaveChanges();
+                                    ModelState.Clear();
+                                    ViewBag.Message = $"{user.User_Name} registered successfully. Please login";
+                                }
+                                else
+                                {
+                                    ModelState.AddModelError("", "Roles table is empty!");
+                                }
+                                
                             }
                             catch (DbUpdateException e)
                             {
@@ -178,9 +186,9 @@ namespace DieticianApp.Controllers
         }
 
         [Authorize]
-        public IActionResult SecurePage()
+        public IActionResult CompleteProfile()
         {
-            ViewBag.Name = HttpContext.User.Identity.Name;
+            
             return View();
         }
 

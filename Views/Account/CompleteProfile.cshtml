@@ -1,0 +1,12 @@
+﻿@if(User.IsInRole("Patient"))
+{
+    <p>asdasdads</p>
+}
+@if (User.IsInRole("Dietican"))
+{
+    <p>sadadadsadasd</p>
+}
+@if (User.IsInRole("Admin"))
+{
+    @Html.PartialAsync("_SecurePage")
+}

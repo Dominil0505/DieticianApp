@@ -12,7 +12,6 @@ namespace DieticianApp.Models.Entities
         [StringLength(255, MinimumLength = 2)]
         public string? Description { get; set; }
 
-
         // Relations
         [ForeignKey("Users")]
         public int? User_Id { get; set; }

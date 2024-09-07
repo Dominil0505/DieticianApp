@@ -2,9 +2,6 @@
 {
     <div class="collapse navbar-collapse">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-                <a class="nav-link text-white" href="#">About</a>
-            </li>
             @if (User.IsInRole("Patient"))
             {
                 <li class="nav-item">
@@ -15,16 +12,13 @@
             @if (User.IsInRole("Admin"))
             {
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="#about"> Patients </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" href=""> Foods </a>
+                    <a class="nav-link text-white" asp-controller="AdminFunctions" asp-action="Foods"> Foods </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-white" asp-controller="AdminFunctions" asp-action="Allergy"> Allergies</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white" href=""> Ingredients</a>
+                    <a class="nav-link text-white" asp-controller="AdminFunctions" asp-action="Ingredients"> Ingredients</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-white" asp-controller="AdminFunctions" asp-action="AddPatient"> Patients</a>
