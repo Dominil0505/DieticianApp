@@ -3,6 +3,7 @@ using DieticianApp.Models.Entities;
 using DieticianApp.Models.ViewModel.AdminFunctions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 
 namespace DieticianApp.Controllers
@@ -29,6 +30,13 @@ namespace DieticianApp.Controllers
             return View("Allergy", model);
         }
 
+        public async Task<IActionResult> AddPatient()
+        {
+            var patient = await _context.Patients.ToListAsync();
+            var model = new AddPatientViewModel();
+            return View("AddPatient");
+        }
+
         [HttpPost]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddAllergy(AddAllergyViewModel model)
@@ -36,23 +44,22 @@ namespace DieticianApp.Controllers
             if (ModelState.IsValid)
             {
                 var isAllergyUsed = await _context.Allergy
-                    .Where(a => a.Allergy_Name == model.AllergyName)
+                    .Where(_ => _.Allergy_Name == model.AllergyName)
                     .FirstOrDefaultAsync();
 
-                if (isAllergyUsed == null) // Ha az allergia még nem létezik
+                if (isAllergyUsed == null)
                 {
                     try
                     {
-                        // Új allergia létrehozása és mentése
                         Allergies allergy = new Allergies(model.AllergyName);
                         _context.Allergy.Add(allergy);
                         await _context.SaveChangesAsync();
 
-                        ViewBag.Message = $"Successfully added {model.AllergyName}";
+                        TempData["MessageAdded"] = $"Successfully added {model.AllergyName}";
 
                         var allergies = await _context.Allergy.ToListAsync();
                         var viewModel = new AddAllergyViewModel(allergies);
-                        return View("Allergy", viewModel);
+                        return RedirectToAction("Allergy", "AdminFunctions");
                     }
                     catch (DbUpdateException e)
                     {
@@ -61,11 +68,10 @@ namespace DieticianApp.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("", "This allergy is already in the database.");
+                    TempData["AllergyUsed"] = $"{model.AllergyName} allergy is already in the database.";
                 }
             }
 
-            // Ha a ModelState nem érvényes, visszaadjuk a modellt a nézetnek
             var currentAllergies = await _context.Allergy.ToListAsync();
             var viewModelWithErrors = new AddAllergyViewModel(currentAllergies);
             return View("Allergy", viewModelWithErrors);
@@ -81,7 +87,35 @@ namespace DieticianApp.Controllers
             {
                 _context.Allergy.Remove(allergy);
                 await _context.SaveChangesAsync();
-                TempData["Message"] = $"Successfully deleted {allergy.Allergy_Name}";
+                TempData["MessageDelete"] = $"Successfully deleted {allergy.Allergy_Name}";
+            }
+
+            return RedirectToAction("Allergy", "AdminFunctions");
+        }
+
+        [Authorize(Roles="Admin")]
+        [HttpPost]
+        public async Task<IActionResult> EditAllergy(AddAllergyViewModel model, int id)
+        {
+            if(ModelState.IsValid)
+            {
+                var allergy = await _context.Allergy.FindAsync(id);
+                var allergyUsed = await _context.Allergy.Where(_ => _.Allergy_Name == model.AllergyName).FirstOrDefaultAsync();
+
+                if(allergyUsed != null)
+                {
+                    ModelState.AddModelError("", "This allergy name is already used");
+                }
+                else
+                {
+                    if (allergy != null)
+                    {
+                        allergy.Allergy_Name = model.AllergyName;
+                        _context.Allergy.Update(allergy);
+                        await _context.SaveChangesAsync();
+                        TempData["Message"] = $"Successfully updated {model.AllergyName}";
+                    }
+                }
             }
 
             return RedirectToAction("Allergy", "AdminFunctions");

@@ -23,12 +23,12 @@
                         </form>
                     </div>
                     <div class="col">
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAllergy">
                             Add new Allergy
                         </button>
-                        <span asp-validation-for="AllergyName" class="text-danger"></span>
+                        
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal fade" id="modalAllergy" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -38,20 +38,31 @@
                                     <form asp-controller="AdminFunctions" asp-action="AddAllergy" method="post">
                                         <div class="modal-body">
                                             <label class="form-label">Allergy name: </label>
-                                            <input class="form-control" asp-for="AllergyName" />
+                                            <input class="form-control" asp-for="AllergyName" value=""/>
                                         </div>
                                         <div class="modal-footer justify-content-center">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            <button type="submit" class="btn btn-primary" id="addToast">Add</button>
+                                            <button type="submit" class="btn btn-primary" id="addAllergy">Add</button>
                                         </div>
                                     </form>
                                 </div>
                             </div>
                         </div>
                     </div>
+                   
+                    <span asp-validation-for="AllergyName" class="text-danger"></span>
+                  
+
+                    @if (TempData["AllergyUsed"] != null)
+                    {
+                        <div class="alert alert-danger">
+                            @TempData["AllergyUsed"]
+                        </div>
+
+                    }
                 </div>
             </div>
-        
+
             <table class="table">
                 <thead>
                     <tr>
@@ -69,11 +80,52 @@
                                 <th scope="row">@allergy.Allergy_Id</th>
                                 <td>@allergy.Allergy_Name</td>
                                 <td>
-                                    <form asp-action="DeleteAllergy" asp-controller="AdminFunctions" method="post" asp-route-id="@allergy.Allergy_Id">
-                                        <button class="btn btn-danger" id="deleteToast" type="submit"><i class="fa-solid fa-trash"></i></button>
-                                    </form>
-                                    
-                                    <a asp-action="EditAllergy" asp-controller="AdminFunctions" class="text-primary"><i class="fa-solid fa-pen"></i></a>
+                                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalDelete-@allergy.Allergy_Id">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                    <button class="btn btn-success" type="submit" data-bs-toggle="modal" data-bs-target="#modalEdit-@allergy.Allergy_Id">
+                                        <i class="fa-solid fa-pen"></i>
+                                    </button>
+                                    <div class="modal fade" id="modalDelete-@allergy.Allergy_Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Delete allergy</h1>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Are you sure to delete <b>@allergy.Allergy_Name</b>?
+                                                </div>
+                                                <form asp-controller="AdminFunctions" asp-action="DeleteAllergy" method="post" asp-route-id="@allergy.Allergy_Id">
+                                                    <div class="modal-footer justify-content-center">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                        <button type="submit" class="btn btn-danger" id="DeleteAllergy">Delete</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal fade" id="modalEdit-@allergy.Allergy_Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit allergy</h1>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <form asp-controller="AdminFunctions" asp-action="EditAllergy" method="post" asp-route-id="@allergy.Allergy_Id">
+                                                    <div class="modal-body">
+                                                        <label class="form-label">Allergy name: </label>
+                                                        <label class="form-label">@allergy.Allergy_Id</label>
+                                                        <input class="form-control" asp-for="AllergyName" />
+                                                    </div>
+                                                    <div class="modal-footer justify-content-center">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                        <button type="submit" class="btn btn-success" id="SaveNewAllergy">Save</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                         }
@@ -91,18 +143,19 @@
     </div>
 </div>
 
+
 @section Scripts {
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
             var deleteToastEl = document.getElementById('deleteToast');
-            var addToastEl = document.getElementById('addToast');
+            var addToastEl = document.getElementById('addToast')
 
-            if (deleteToastEl && @Html.Raw(Json.Serialize(TempData["Message"] != null))) {
+            if (deleteToastEl && @Html.Raw(Json.Serialize(TempData["MessageDelete"] != null))) {
                 var deleteToast = new bootstrap.Toast(deleteToastEl);
                 deleteToast.show();
             }
 
-            if (addToastEl && @Html.Raw(Json.Serialize(ViewBag.Message != null))) {
+            if (addToastEl && @Html.Raw(Json.Serialize(TempData["MessageAdded"] != null))) {
                 var addToast = new bootstrap.Toast(addToastEl);
                 addToast.show();
             }
@@ -111,29 +164,28 @@
     </script>
 }
 
- <div class="toast-container position-fixed bottom-0 end-0 p-3">
-    <div id="deleteToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-header">
-            <strong class="me-auto">Notification</strong>
-            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-        <div class="toast-body" style="background-color: red; color: white;">
-            @if (TempData["Message"] != null)
+<div class="toast position-fixed bottom-0 end-0 p-3 text-bg-danger m-3" role="alert" aria-live="assertive" aria-atomic="true" id="deleteToast">
+    <div class="d-flex">
+        <div class="toast-body">
+            <i class="fa-solid fa-trash"></i>
+            @if (TempData["MessageDelete"] != null)
             {
-                @TempData["Message"]
+                @TempData["MessageDelete"]
             }
         </div>
+        <button type="button" class="btn-close me-2 m-auto btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
 </div>
 
-<div class="toast-container position-fixed bottom-0 end-0 p-3">
-    <div id="addToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-header">
-            <strong class="me-auto">Notification</strong>
-            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+<div class="toast position-fixed bottom-0 end-0 p-3 text-bg-success m-3" role="alert" aria-live="assertive" aria-atomic="true" id="addToast">
+    <div class="d-flex">
+        <div class="toast-body">
+            @if (TempData["MessageAdded"] != null)
+            {
+                @TempData["MessageAdded"]
+            }
         </div>
-        <div class="toast-body" style="background-color: red; color: white;">
-            <div class="text-success py-3">@ViewBag.Message</div>
-        </div>
+        <button type="button" class="btn-close me-2 m-auto btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
 </div>
+

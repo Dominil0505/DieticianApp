@@ -14,6 +14,8 @@ namespace DieticianApp.Models.ViewModel.Profile
         [Required(ErrorMessage = "Please choose a gender")]
         public string? Gender{ get; set; }
 
+        public List<Patients> Patients { get; set; } = new List<Patients>();
+
         // Allergies
         public List<SelectListItem>? AvaliableAllergies{ get; set; }
         public List<int>? SelectedAllergyIds{ get; set; }
@@ -23,5 +25,14 @@ namespace DieticianApp.Models.ViewModel.Profile
 
         // Disease
         public List<string>? Disease { get; set; }
+
+        public PatientProfileViewModel()
+        {
+        }
+
+        public PatientProfileViewModel(List<Patients> patients)
+        {
+            Patients = patients;
+        }
     }
 }

@@ -36,4 +36,12 @@ public class Patients
     {
         User_Id = user_Id;
     }
+
+    public Patients(DateTime? doB, byte? height, short? weight, string? gender)
+    {
+        DoB = doB;
+        Height = height;
+        Weight = weight;
+        Gender = gender;
+    }
 }

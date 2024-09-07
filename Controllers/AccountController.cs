@@ -149,7 +149,7 @@ namespace DieticianApp.Controllers
                         new Claim(ClaimTypes.Name, user.User_Name),
                         new Claim("Name", user.User_Name),
                         new Claim(ClaimTypes.Email, user.Email),
-                        new Claim("Email", user.User_Name),
+                        new Claim("Email", user.User_Name)
                     };
 
                     foreach (var userRole in user.UserRoles)

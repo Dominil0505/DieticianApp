@@ -28,65 +28,77 @@
         <div class="card">
             <div class="tab-content">
                 <div class="tab-pane active" id="personalDetails" role="tabpanel">
-                    <div class="card-header">
-                        <h6 class="card-title mb-0">Personal Details</h6>
-                    </div>
+                    <h5 class="card-title m-3">Personal Details</h5>
                     <div class="card-body">
-                        <form asp-action="EditPatient">
-                            <div class="row">
-                                <div class="col-lg-6 mb-3">
-                                    <label class="form-label">Username</label>
-                                    <input asp-for="Username" type="text" class="form-control" placeholder="Enter new name">
-                                    <span asp-validation-for="Username" class="text-danger"></span>
-                                </div>
-                                <div class="col-lg-6 mb-3">
-                                    <label class="form-label">Birthday</label>
-                                    <input asp-for="DoB" type="date" class="form-control" />
-                                    <span asp-validation-for="DoB" class="text-danger"></span>
-                                </div>
-                                <div class="col-lg-6 mb-3">
-                                    <label class="form-label">Gender</label>
-                                    <select class="form-select" asp-for="Gender">
-                                        <option value="Male">Male</option>
-                                        <option value="Female">Female</option>
-                                    </select>
-                                    <span asp-validation-for="Gender" class="text-danger"></span>
-                                </div>
-                                <div class="col-lg-6 mb-3">
-                                    <label class="form-label">Height (cm)</label>
-                                    <input asp-for="Height" type="number" class="form-control" placeholder="158" />
-                                    <span asp-validation-for="Height" class="text-danger"></span>
-                                </div>
-                                <div class="col-lg-6 mb-3">
-                                    <div class="mb-3">
-                                        <label class="form-label">Weight (kg)</label>
-                                        <input asp-for="Weight" type="number" class="form-control" placeholder="68" />
-                                        <span asp-validation-for="Weight" class="text-danger"></span>
+                       @*  @if (Model.Patients != null)
+                        {
+                            @foreach (var patient in Model.Patients)
+                            { *@
+                                <form asp-action="SavePatient" method="post">
+
+
+                                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                    <div class="row">
+                                        @* <div class="col-lg-6 mb-3">
+                                            <label class="form-label">Username</label>
+                                            <input asp-for="Username" type="text" class="form-control" placeholder="Enter new name">
+                                            <span asp-validation-for="Username" class="text-danger"></span>
+                                        </div> *@
+                                        <div class="col-lg-6 mb-3">
+                                            <label class="form-label">Birthday</label>
+                                            <input asp-for="DoB" type="date" class="form-control" />
+                                            <span asp-validation-for="DoB" class="text-danger"></span>
+                                        </div>
+                                        <div class="col-lg-6 mb-3">
+                                            <label class="form-label">Gender</label>
+                                            <select class="form-select" asp-for="Gender">
+                                                <option value="Male">Male</option>
+                                                <option value="Female">Female</option>
+                                            </select>
+                                            <span asp-validation-for="Gender" class="text-danger"></span>
+                                        </div>
+                                        <div class="col-lg-6 mb-3">
+                                            <label class="form-label">Height (cm)</label>
+                                            <input asp-for="Height" type="number" class="form-control" placeholder="158" />
+                                            <span asp-validation-for="Height" class="text-danger"></span>
+                                        </div>
+                                        <div class="col-lg-6 mb-3">
+                                            <div class="mb-3">
+                                                <label class="form-label">Weight (kg)</label>
+                                                <input asp-for="Weight" type="number" class="form-control" placeholder="68" />
+                                                <span asp-validation-for="Weight" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 mb-3">
+                                            <label class="form-label">Allergies</label>
+                                            <select class="form-select" asp-for="SelectedAllergyIds">
+                                                <option value="Laktóz">Laktóz</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-lg-6 mb-3">
+                                            <div class="form-floating">
+                                                <textarea asp-for="Disease" class="form-control" id="floatingTextarea"></textarea>
+                                                <label for="floatingTextarea">Disease</label>
+                                                <span asp-validation-for="Disease" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 mb-3">
+                                            <div class="form-floating">
+                                                <textarea asp-for="Medication" class="form-control" id="floatingTextarea"></textarea>
+                                                <label for="floatingTextarea">Medications</label>
+                                                <span asp-validation-for="Medication" class="text-danger"></span>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-lg-6 mb-3">
-                                    <label class="form-label">Allergies</label>
-                                    <select class="form-select" asp-for="SelectedAllergyIds">
-                                        <option value="Laktóz">Laktóz</option>
-                                    </select>
-                                </div>
-                                <div class="col-lg-6 mb-3">
-                                    <div class="form-floating">
-                                        <textarea asp-for="Disease" class="form-control" id="floatingTextarea"></textarea>
-                                        <label for="floatingTextarea">Disease</label>
-                                        <span asp-validation-for="Disease" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 mb-3">
-                                    <div class="form-floating">
-                                        <textarea asp-for="Medication" class="form-control" id="floatingTextarea"></textarea>
-                                        <label for="floatingTextarea">Medications</label>
-                                        <span asp-validation-for="Medication" class="text-danger"></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <button class="btn btn-primary" type="submit">Save</button>
-                        </form>
+                                    <button class="btn btn-primary" type="submit">Save</button>
+                                </form>
+                            @* }
+                        }
+                        else
+                        {
+                            <div class="alert alert-danger">Pateint is empty</div>
+                        } *@
+
                     </div>
                 </div>
                 <div class="tab-pane" id="changePassword" role="tabpanel">

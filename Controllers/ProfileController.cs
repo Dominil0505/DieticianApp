@@ -2,7 +2,9 @@
 using DieticianApp.Models.ViewModel.Profile;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.InteropServices;
 using System.Security.Claims;
 
 namespace DieticianApp.Controllers
@@ -62,25 +64,28 @@ namespace DieticianApp.Controllers
         }
 
         [Authorize(Roles = "Patient")]
-        public async Task<IActionResult> EditPatient(PatientProfileViewModel model) 
+        [HttpPost]
+        public async Task<IActionResult> SavePatient(PatientProfileViewModel model) 
         {
             if(model != null)
             {
                 var userEmail = User.FindFirstValue(ClaimTypes.Email);
                 if(userEmail != null)
                 {
-                    var patient = _context.Users
-                        .Include(u => u.Patients)
-                        .FirstOrDefault(u => u.Email == userEmail)?.Patients;
-                    
-                    patient.User.User_Name = model.Username;
-                    patient.DoB = model.DoB;
-                    patient.Height = model.Height;
-                    patient.Weight = model.Weight;
-                    patient.Gender = model.Gender;
-                    
+                    var user = await _context.Users.Where(_ => _.Email == userEmail).FirstOrDefaultAsync();
+
+                    if (user != null)
+                    {
+                        var patients = new Patients(model.DoB, model.Height, model.Weight, model.Gender);
+
+                        await _context.Patients.AddAsync(patients);
+                        await _context.SaveChangesAsync();
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("",$"No user found in the database email: {userEmail}");
+                    }
                 }
-                
             }
             else
             {
