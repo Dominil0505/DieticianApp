@@ -9,6 +9,8 @@ using System.Configuration;
 using DieticianApp.Models.Entities;
 using DieticianApp.Models.JoinTables;
 using DieticianApp.Models.ViewModel;
+using DieticianApp.Models.ViewModel.Profile;
+using Humanizer;
 
 namespace DieticianApp.Controllers
 {
@@ -168,7 +170,11 @@ namespace DieticianApp.Controllers
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
 
-                    return RedirectToAction("SecurePage");
+                    if (User.IsInRole("Patient"))
+                    {
+                        CompleteProfile();
+                    }
+                    return RedirectToAction("CompleteProfile");
                 }
                 else
                 {
@@ -182,14 +188,24 @@ namespace DieticianApp.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Login", "Account");
         }
 
         [Authorize]
-        public IActionResult CompleteProfile()
+        public async Task<IActionResult> CompleteProfile()
         {
-            
-            return View();
+            var allergies = await _context.Allergy.ToListAsync();
+            var diseases = await _context.Diseases.ToListAsync();
+            var medicines = await _context.Medicines.ToListAsync();
+
+            var viewModel = new CompleteProfileViewModel
+            {
+                Allergies = allergies ?? new List<Allergies>(),
+                Diseases = diseases ?? new List<Diseases>(),
+                Medicines = medicines ?? new List<Medicines>()
+            };
+
+            return View("CompleteProfile", viewModel);
         }
 
 

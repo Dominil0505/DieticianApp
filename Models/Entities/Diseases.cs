@@ -14,5 +14,10 @@ namespace DieticianApp.Models.Entities
 
         // Relation
         public virtual ICollection<Patient_Disease> PatientDiseases { get; set; } = new List<Patient_Disease>();
+
+        public Diseases(string? disease_Name)
+        {
+            Disease_Name = disease_Name;
+        }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using DieticianApp.Data;
+using DieticianApp.Models.Entities;
+using DieticianApp.Models.JoinTables;
 using DieticianApp.Models.ViewModel.Profile;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +14,11 @@ namespace DieticianApp.Controllers
     public class ProfileController : Controller
     {
         private readonly AppDbContext _context;
+
+        public ProfileController(AppDbContext context)
+        {
+            _context = context;
+        }
 
         public IActionResult Index()
         {
@@ -95,5 +102,29 @@ namespace DieticianApp.Controllers
             return View(model);
         }
 
+        
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> CompleteProfile(CompleteProfileViewModel model)
+        {
+            if (model != null)
+            {
+                var userEmail = User.FindFirstValue(ClaimTypes.Email);
+                var user = await _context.Users.Where(_ => _.Email == userEmail).FirstOrDefaultAsync();
+
+                if (user != null) {
+
+                    Patients patient = new Patients(model.DoB, model.Height, model.Weight, model.Gender);
+                    
+
+                    user.Patients = patient;
+                    await _context.Patients.AddAsync(patient);
+                    await _context.SaveChangesAsync();
+                    
+                }
+            }
+
+            return View(model);
+        }
     }
 }

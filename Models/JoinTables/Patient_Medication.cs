@@ -9,6 +9,12 @@ namespace DieticianApp.Models.JoinTables
 
         // Relations
         public virtual Patients Patient { get; set; }
-        public virtual Medications Medication { get; set; }
+        public virtual Medicines Medication { get; set; }
+
+        public Patient_Medication(int patientId, int medicationId)
+        {
+            PatientId = patientId;
+            MedicationId = medicationId;
+        }
     }
 }

@@ -17,7 +17,7 @@ namespace DieticianApp.Data
         public DbSet<Foods> Foods { get; set; }
         public DbSet<Allergies> Allergy { get; set; }
         public DbSet<Diseases> Diseases { get; set; }
-        public DbSet<Medications> Medicines { get; set; }
+        public DbSet<Medicines> Medicines { get; set; }
         public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<Admins> Admins{ get; set; }
         public DbSet<Users> Users { get; set; }
