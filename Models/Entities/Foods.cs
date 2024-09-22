@@ -32,5 +32,14 @@ namespace DieticianApp.Models.Entities
         public virtual ICollection<Food_Ingredients> FoodIngredients { get; set; } = new List<Food_Ingredients>();
         public virtual ICollection<Food_Allergies> FoodAllergies { get; set; } = new List<Food_Allergies>();
         public virtual ICollection<Menu_Foods> MenuFoods { get; set; } = new List<Menu_Foods>();
+
+        public Foods(string? food_Name, int? calorie, int? protein, int? fat, int? carbohydrate)
+        {
+            Food_Name = food_Name;
+            Calorie = calorie;
+            Protein = protein;
+            Fat = fat;
+            Carbohydrate = carbohydrate;
+        }
     }
 }

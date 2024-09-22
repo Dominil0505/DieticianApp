@@ -28,6 +28,19 @@ namespace DieticianApp.Models.Entities
 
         // Relation
         public virtual ICollection<Food_Ingredients> FoodIngredients { get; set; } = new List<Food_Ingredients>();
+
+        public Ingredient()
+        {
+        }
+
+        public Ingredient(string? ingredient_Name, int? calorie, int? protein, int? fat, int? carbohydrate)
+        {
+            Ingredient_Name = ingredient_Name;
+            Calorie = calorie;
+            Protein = protein;
+            Fat = fat;
+            Carbohydrate = carbohydrate;
+        }
     }
 }
 

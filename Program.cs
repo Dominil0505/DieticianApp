@@ -1,6 +1,7 @@
 using DieticianApp.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using System.Composition.Hosting.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,5 +35,9 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapControllerRoute(
+    name: "Disease",
+    pattern: "{controller=AdminFunctions}/action=Diseases");
 
 app.Run();

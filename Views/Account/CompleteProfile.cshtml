@@ -37,15 +37,14 @@
                                 <div class="col-lg-6 mb-3">
                                     <label class="form-label">Disease</label>
                                     <select id="multiSelect" class="selectpicker form-control mb-2" multiple data-live-search="true" title="Choose disease..." asp-for="SelectedDiseases">
-                                        @* @foreach (var disease in Model.Diseases)
+                                        @foreach (var disease in Model.Diseases)
                                         {
                                             <option value="@disease.Disease_Id">
                                                 @disease.Disease_Name
                                             </option>
-                                        } *@
+                                        }   
 
                                     </select>
-                                    <button class="btn btn-warning">Add new disease</button>
                                 </div>
                                 <div class="col-lg-6 mb-3">
                                     <label class="form-label">Medications</label>
@@ -57,7 +56,6 @@
                                             </option>
                                         }
                                     </select>
-                                    <button class="btn btn-warning">Add new medicine</button>
                                 </div>
                                 <div class="col mb-3">
                                     <label class="form-label">Allergies</label>
@@ -69,8 +67,6 @@
                                             </option>
                                         }
                                     </select>
-                                    <button class="btn btn-warning">Add new allergy</button>
-                                    <span asp-validation-for="SelectedAllergies" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="d-flex justify-content-center">

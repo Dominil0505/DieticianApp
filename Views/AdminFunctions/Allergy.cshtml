@@ -52,21 +52,12 @@
                    
                     <span asp-validation-for="AllergyName" class="text-danger"></span>
                   
-
-                    @if (TempData["AllergyUsed"] != null)
-                    {
-                        <div class="alert alert-danger">
-                            @TempData["AllergyUsed"]
-                        </div>
-
-                    }
                 </div>
             </div>
 
-            <table class="table">
+            <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th scope="col">#</th>
                         <th scope="col">Allergy name</th>
                         <th scope="col">Action</th>
                     </tr>
@@ -77,7 +68,6 @@
                         foreach (var allergy in Model.Allergies)
                         {
                             <tr>
-                                <th scope="row">@allergy.Allergy_Id</th>
                                 <td>@allergy.Allergy_Name</td>
                                 <td>
                                     <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalDelete-@allergy.Allergy_Id">
@@ -115,8 +105,7 @@
                                                 <form asp-controller="AdminFunctions" asp-action="EditAllergy" method="post" asp-route-id="@allergy.Allergy_Id">
                                                     <div class="modal-body">
                                                         <label class="form-label">Allergy name: </label>
-                                                        <label class="form-label">@allergy.Allergy_Id</label>
-                                                        <input class="form-control" asp-for="AllergyName" />
+                                                        <input class="form-control" asp-for="AllergyName" value="@allergy.Allergy_Name"/>
                                                     </div>
                                                     <div class="modal-footer justify-content-center">
                                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -143,28 +132,33 @@
     </div>
 </div>
 
-
 @section Scripts {
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
             var deleteToastEl = document.getElementById('deleteToast');
-            var addToastEl = document.getElementById('addToast')
+            var addToastEl = document.getElementById('addToast');
+            var editToastEl = document.getElementById('editToast');
 
             if (deleteToastEl && @Html.Raw(Json.Serialize(TempData["MessageDelete"] != null))) {
                 var deleteToast = new bootstrap.Toast(deleteToastEl);
                 deleteToast.show();
             }
 
-            if (addToastEl && @Html.Raw(Json.Serialize(TempData["MessageAdded"] != null))) {
+            if (addToastEl && (@Html.Raw(Json.Serialize(TempData["MessageAdded"] != null)) || @Html.Raw(Json.Serialize(TempData["MessageUsed"] != null)))) {
                 var addToast = new bootstrap.Toast(addToastEl);
                 addToast.show();
             }
-        });
 
+            if (editToastEl && @Html.Raw(Json.Serialize(TempData["MessageUpdated"] != null))) {
+                var editToast = new bootstrap.Toast(editToastEl);
+                editToast.show();
+            }
+        });
     </script>
 }
 
-<div class="toast position-fixed bottom-0 end-0 p-3 text-bg-danger m-3" role="alert" aria-live="assertive" aria-atomic="true" id="deleteToast">
+
+<div class="toast position-fixed bottom-0 end-0 p-3 text-bg-danger m-3 fs-6" role="alert" aria-live="assertive" aria-atomic="true" id="deleteToast">
     <div class="d-flex">
         <div class="toast-body">
             <i class="fa-solid fa-trash"></i>
@@ -177,15 +171,33 @@
     </div>
 </div>
 
-<div class="toast position-fixed bottom-0 end-0 p-3 text-bg-success m-3" role="alert" aria-live="assertive" aria-atomic="true" id="addToast">
+<div class="toast position-fixed bottom-0 end-0 p-3 m-3 fs-6 @((TempData["MessageUsed"] != null) ? "text-bg-warning" : "text-bg-success")" role="alert" aria-live="assertive" aria-atomic="true" id="addToast">
     <div class="d-flex">
         <div class="toast-body">
             @if (TempData["MessageAdded"] != null)
             {
+                <i class="fa-solid fa-check"></i>
                 @TempData["MessageAdded"]
             }
+            @if (TempData["MessageUsed"] != null)
+            {
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                @TempData["MessageUsed"]
+            }
         </div>
-        <button type="button" class="btn-close me-2 m-auto btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+        <button type="button" class="btn-close me-2 m-auto @((TempData["MessageUsed"] != null) ? "btn-close" : "btn-close-white")" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
 </div>
 
+<div class="toast position-fixed bottom-0 end-0 p-3 text-bg-info m-3 fs-6" role="alert" aria-live="assertive" aria-atomic="true" id="editToast">
+    <div class="d-flex">
+        <div class="toast-body">
+            <i class="fa-solid fa-pencil-alt"></i>
+            @if (TempData["MessageUpdated"] != null)
+            {
+                @TempData["MessageUpdated"]
+            }
+        </div>
+        <button type="button" class="btn-close me-2 m-auto btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+</div>

@@ -1,4 +1,4 @@
-﻿@model DieticianApp.Models.ViewModel.AdminFunctions.AddMedicinesViewModel
+﻿@model DieticianApp.Models.ViewModel.AdminFunctions.AddIngredientsViewModel
 
 <div class="container">
     <div class="row py-5">
@@ -23,26 +23,44 @@
                         </form>
                     </div>
                     <div class="col">
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalMedicine">
-                            Add new Medicine
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalIngredient">
+                            Add new Ingredient
                         </button>
 
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <div class="modal fade" id="modalMedicine" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal fade" id="modalIngredient" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Add new Medicine</h1>
+                                        <h3 class="modal-title" id="staticBackdropLabel">Add new Ingredient</h3>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
-                                    <form asp-controller="AdminFunctions" asp-action="AddMedicine" method="post">
+                                    <form asp-controller="AdminFunctions" asp-action="AddIngredient" method="post">
                                         <div class="modal-body">
-                                            <label class="form-label">Medicine name: </label>
-                                            <input class="form-control" asp-for="Medicine_Name" />
+                                            <label class="form-label">Ingredient name: </label>
+                                            <input class="form-control" asp-for="Ingredient_Name" value="" placeholder="ex: carrot" />
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <label class="form-label">Calorie: </label>
+                                                    <input class="form-control" asp-for="Calorie" type="number" min="0" value="" placeholder="ex: 5"/>
+                                                </div>
+                                                <div class="col-6">
+                                                    <label class="form-label">Protein: </label>
+                                                    <input class="form-control" asp-for="Protein" type="number" min="0" value="" placeholder="ex: 5" />
+                                                </div>
+                                                <div class="col-6">
+                                                    <label class="form-label">Fat: </label>
+                                                    <input class="form-control" asp-for="Fat" type="number" min="0" value="" placeholder="ex: 5" />
+                                                </div>
+                                                <div class="col-6">
+                                                    <label class="form-label">Carbohydrate: </label>
+                                                    <input class="form-control" asp-for="Carbohydrate" type="number" min="0" value="" placeholder="ex: 5" />
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="modal-footer justify-content-center">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            <button type="submit" class="btn btn-primary" id="addMedicine">Add</button>
+                                            <button type="submit" class="btn btn-primary" id="addIngredient">Add</button>
                                         </div>
                                     </form>
                                 </div>
@@ -50,62 +68,93 @@
                         </div>
                     </div>
 
-                    <span asp-validation-for="Medicine_Name" class="text-danger"></span>
+                    <span asp-validation-for="Ingredient_Name" class="text-danger"></span>
+                    <span asp-validation-for="Calorie" class="text-danger"></span>
+                    <span asp-validation-for="Protein" class="text-danger"></span>
+                    <span asp-validation-for="Fat" class="text-danger"></span>
+                    <span asp-validation-for="Carbohydrate" class="text-danger"></span>
+
                 </div>
             </div>
 
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th scope="col">Medicine name</th>
+                        <th scope="col">Ingredient name</th>
+                        <th scope="col">Calorie</th>
+                        <th scope="col">Protein</th>
+                        <th scope="col">Fat</th>
+                        <th scope="col">Carbohydrate</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
                 <tbody class="table-group-divider">
-                    @if (Model.Medicines != null && Model.Medicines.Any())
+                    @if (Model.Ingredient != null && Model.Ingredient.Any())
                     {
-                        foreach (var medicine in Model.Medicines)
+                        foreach (var ingredient in Model.Ingredient)
                         {
                             <tr>
-                                <td>@medicine.Medicine_Name</td>
+                                <td>@ingredient.Ingredient_Name</td>
+                                <td>@ingredient.Calorie</td>
+                                <td>@ingredient.Protein</td>
+                                <td>@ingredient.Fat</td>
+                                <td>@ingredient.Carbohydrate</td>
                                 <td>
-                                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalDelete-@medicine.Medicine_Id">
+                                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalDelete-@ingredient.Ingredient_Id">
                                         <i class="fa-solid fa-trash"></i>
                                     </button>
-                                    <button class="btn btn-success" type="submit" data-bs-toggle="modal" data-bs-target="#modalEdit-@medicine.Medicine_Id">
+                                    <button class="btn btn-success" type="submit" data-bs-toggle="modal" data-bs-target="#modalEdit-@ingredient.Ingredient_Id">
                                         <i class="fa-solid fa-pen"></i>
                                     </button>
-                                    <div class="modal fade" id="modalDelete-@medicine.Medicine_Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                    <div class="modal fade" id="modalDelete-@ingredient.Ingredient_Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Delete Medicine</h1>
+                                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Delete Ingredient</h1>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    Are you sure to delete <b>@medicine.Medicine_Name</b>?
+                                                    Are you sure to delete <b>@ingredient.Ingredient_Name</b>?
                                                 </div>
-                                                <form asp-controller="AdminFunctions" asp-action="DeleteMedicine" method="post" asp-route-id="@medicine.Medicine_Id">
+                                                <form asp-controller="AdminFunctions" asp-action="DeleteIngredient" method="post" asp-route-id="@ingredient.Ingredient_Id">
                                                     <div class="modal-footer justify-content-center">
                                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                        <button type="submit" class="btn btn-danger" id="DeleteMedicine">Delete</button>
+                                                        <button type="submit" class="btn btn-danger" id="DeleteIngredient">Delete</button>
                                                     </div>
                                                 </form>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="modal fade" id="modalEdit-@medicine.Medicine_Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                    <div class="modal fade" id="modalEdit-@ingredient.Ingredient_Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit medicine</h1>
+                                                    <h3 class="modal-title" id="staticBackdropLabel">Edit allergy</h3>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
-                                                <form asp-controller="AdminFunctions" asp-action="EditMedicine" method="post" asp-route-id="@medicine.Medicine_Id">
+                                                <form asp-controller="AdminFunctions" asp-action="EditIngredient" method="post" asp-route-id="@ingredient.Ingredient_Id">
                                                     <div class="modal-body">
-                                                        <label class="form-label">Medicine name: </label>
-                                                        <label class="form-label">@medicine.Medicine_Name</label>
-                                                        <input class="form-control" asp-for="Medicine_Name" value="@medicine.Medicine_Name"/>
+                                                        <label class="form-label">Ingredient name: </label>
+                                                        <input class="form-control mb-2" asp-for="Ingredient_Name" placeholder="@ingredient.Ingredient_Name" />
+
+                                                        <div class="row">
+                                                            <div class="col-6 mb-2">
+                                                                <label class="form-label">Calorie: </label>
+                                                                <input class="form-control" asp-for="Calorie" type="number" min="0" value="@ingredient.Calorie"/>
+                                                            </div>
+                                                            <div class="col-6 mb-2">
+                                                                <label class="form-label">Protein: </label>
+                                                                <input class="form-control" asp-for="Protein" type="number" min="0" value="@ingredient.Protein" />
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <label class="form-label">Fat: </label>
+                                                                <input class="form-control" asp-for="Fat" type="number" min="0" value="@ingredient.Fat" />
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <label class="form-label">Carbohydrate: </label>
+                                                                <input class="form-control" asp-for="Carbohydrate" type="number" min="0" value="@ingredient.Carbohydrate" />
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                     <div class="modal-footer justify-content-center">
                                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -122,7 +171,7 @@
                     else
                     {
                         <tr>
-                            <td colspan="3">No Medicine found.</td>
+                            <td colspan="6" class="fw-bold fs-4">No Ingredients found.</td>
                         </tr>
                     }
                 </tbody>
@@ -131,7 +180,6 @@
         </div>
     </div>
 </div>
-
 
 @section Scripts {
     <script>
@@ -202,4 +250,5 @@
         <button type="button" class="btn-close me-2 m-auto btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
 </div>
+
 

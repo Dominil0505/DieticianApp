@@ -10,5 +10,11 @@ namespace DieticianApp.Models.JoinTables
         // Relations
         public Foods? Food { get; set; }
         public virtual Allergies? Allergy { get; set; }
+
+        public Food_Allergies(int foodId, int allergyId)
+        {
+            FoodId = foodId;
+            AllergyId = allergyId;
+        }
     }
 }

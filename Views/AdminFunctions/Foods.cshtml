@@ -1,0 +1,356 @@
+﻿@model DieticianApp.Models.ViewModel.AdminFunctions.AddFoodsViewModel
+<div class="container">
+<div class="row py-5">
+    <div class="col-xl-10">
+        <div class="bg-light rounded mb-4">
+            <div class="row g-2">
+                <div class="col">
+                    <form>
+                        <select class="form-select">
+                            <option>Sort</option>
+                            <option>Descading</option>
+                            <option>Asceding</option>
+                        </select>
+                    </form>
+                </div>
+                <div class="col">
+                    <form>
+                        <div class="input-group overflow-hidden">
+                            <input type="text" class="form-control" placeholder="Search ....">
+                            <span class="input-group-text auth-input">
+                                <a href="">
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+                                </a>
+                            </span>
+                        </div>
+                    </form>
+                </div>
+                <div class="col">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalFood">
+                        Add new Food
+                    </button>
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="modal fade" id="modalFood" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Add new Food</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <form asp-controller="AdminFunctions" asp-action="addFood" method="post">
+                                    <div class="modal-body">
+                                        <label class="form-label">Food name: </label>
+                                        <input class="form-control" asp-for="Food_Name" value=""/>
+
+                                        <div class="row">
+                                            <div class="col-6 mb-2">
+                                                <label class="form-label">Calorie: </label>
+                                                <input class="form-control" id="calorieInput" type="number" min="0" value="0" asp-for="Calorie"/>
+                                            </div>
+                                            <div class="col-6 mb-2">
+                                                <label class="form-label">Protein: </label>
+                                                <input class="form-control" id="proteinInput" type="number" min="0" value="0" asp-for="Protein"/>
+                                            </div>
+                                            <div class="col-6">
+                                                <label class="form-label">Fat: </label>
+                                                <input class="form-control" id="fatInput" type="number" min="0" value="0" asp-for="Fat"/>
+                                            </div>
+                                            <div class="col-6">
+                                                <label class="form-label">Carbohydrate: </label>
+                                                <input class="form-control" id="carbInput" type="number" min="0" value="0" asp-for="Carbohydrate"/>
+                                            </div>
+                                        </div>
+                                        @if(Model.Ingredients != null && Model.Ingredients.Any())
+                                        {
+                                            <select id="multiSelect" class="selectpicker form-control mb-2 py-3" multiple data-live-search="true" title="Choose ingredient..." asp-for="SelectedIngredients">
+                                                @foreach (var ingredient in Model.Ingredients)
+                                                {
+                                                    <option value="@ingredient.Ingredient_Id" data-calorie="@ingredient.Calorie" data-protein="@ingredient.Protein" data-fat="@ingredient.Fat" data-carb="@ingredient.Carbohydrate">
+                                                        @ingredient.Ingredient_Name
+                                                    </option>
+                                                }
+                                            </select>
+                                        }
+                                        @if (Model.Allergies != null && Model.Allergies.Any())
+                                        {
+                                            <select id="multiSelect" class="selectpicker form-control mb-2 py-3" multiple data-live-search="true" title="Choose allergy..." asp-for="SelectedAllergies">
+                                                @foreach (var allergy in Model.Allergies)
+                                                {
+                                                    <option value="@allergy.Allergy_Id">
+                                                        @allergy.Allergy_Name
+                                                    </option>
+                                                }
+
+                                            </select>
+                                        }
+                                    </div>
+                                    <div class="modal-footer justify-content-center">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary" id="addFood">Add</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <span asp-validation-for="Food_Name" class="text-danger"></span>
+
+            </div>
+        </div>
+
+        <div class="row">
+            @if (Model.Foods != null && Model.Foods.Any())
+            {
+                foreach (var food in Model.Foods)
+                {
+                    <div class="col-4">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col text-end dropdown">
+                                            <a class="" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false"><i class="fa-solid fa-ellipsis"></i></a>
+                                            <ul class="dropdown-menu dropdown-menu-end align-items-center">
+                                                <li>
+                                                    <a class="dropdown-item link-danger" href="" data-bs-toggle="modal" data-bs-target="#modalDelete-@food.Food_Id">
+                                                        Delete <i class="fa-solid fa-trash"></i>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item link-success" href="" type="submit" data-bs-toggle="modal" data-bs-target="#modalEdit-@food.Food_Id">
+                                                        Edit <i class="fa-solid fa-pen"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="card-title text-center py-2">
+                                        <h5>@food.Food_Name</h5>
+                                    </div>
+                                <div class="text-center">
+                                        <ul class ="list-inline mb-0">
+                                            <div class="row">
+                                                <div class="mb-3">
+                                            <li class="list-inline-item">
+                                                <span class="badge rounded-pill text-bg-success fs-1rem mb-2"> Calorie: @food.Calorie </span>
+                                                <span class="badge rounded-pill text-bg-success fs-1rem mb-2"> Protein: @food.Protein </span>
+                                                <span class="badge rounded-pill text-bg-success fs-1rem mb-2"> Fat: @food.Fat </span>
+                                                <span class="badge rounded-pill text-bg-success fs-1rem mb-2"> Carbohydrate: @food.Carbohydrate </span>
+                                            </li>
+                                            </div>
+                                        </div>
+                                        </ul>
+                                    
+                                        
+                                        @if(food.FoodAllergies != null && food.FoodAllergies.Any())
+                                        {
+                                            <ul class="list-inline">
+                                                @foreach (var item in food.FoodAllergies)
+                                                {
+                                                    <li class="list-inline-item">@item.Allergy.Allergy_Name</li>
+                                                }
+                                            </ul>
+                                        }
+                                        @if(food.FoodIngredients != null && food.FoodIngredients.Any())
+                                        {
+                                            <ul class="list-inline">
+                                                @foreach (var item in food.FoodIngredients)
+                                                {
+                                                    <li class="list-inline-item">@item.Ingredient.Ingredient_Name</li>
+                                                }
+                                            </ul>
+                                        }
+                                </div>
+                            </div>
+                            <div class="modal fade" id="modalDelete-@food.Food_Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Delete Food</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Are you sure to delete <b>@food.Food_Name</b>?
+                                        </div>
+                                        <form asp-controller="AdminFunctions" asp-action="DeleteFood" method="post" asp-route-id="@food.Food_Id">
+                                            <div class="modal-footer justify-content-center">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-danger" id="DeleteFood">Delete</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal fade" id="modalEdit-@food.Food_Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit Food</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <form asp-controller="AdminFunctions" asp-action="EditFood" method="post" asp-route-id="@food.Food_Id">
+                                            <div class="modal-body">
+                                                <label class="form-label">Food name: </label>
+                                                <input class="form-control" asp-for="Food_Name" placeholder="@food.Food_Name" />
+
+                                            <div class="row">
+                                                <div class="col-6 mb-2">
+                                                    <label class="form-label">Calorie: </label>
+                                                    <input class="form-control" id="calorieInput" type="number" min="0" value="@food.Calorie" asp-for="Calorie" />
+                                                </div>
+                                                <div class="col-6 mb-2">
+                                                    <label class="form-label">Protein: </label>
+                                                    <input class="form-control" id="proteinInput" type="number" min="0" value="@food.Protein" asp-for="Protein" />
+                                                </div>
+                                                <div class="col-6">
+                                                    <label class="form-label">Fat: </label>
+                                                    <input class="form-control" id="fatInput" type="number" min="0" value="@food.Fat" asp-for="Fat" />
+                                                </div>
+                                                <div class="col-6">
+                                                    <label class="form-label">Carbohydrate: </label>
+                                                    <input class="form-control" id="carbInput" type="number" min="0" value="@food.Carbohydrate" asp-for="Carbohydrate" />
+                                                </div>
+                                            </div>
+                                                    @if (Model.Ingredients != null && Model.Ingredients.Any())
+                                                    {
+                                                <select id="multiSelect" class="selectpicker form-control mb-2 py-3" multiple data-live-search="true" title="Choose ingredient..." asp-for="SelectedIngredients">
+                                                            @foreach (var ingredient in Model.Ingredients)
+                                                            {
+                                                        <option value="@ingredient.Ingredient_Id" data-calorie="@ingredient.Calorie" data-protein="@ingredient.Protein" data-fat="@ingredient.Fat" data-carb="@ingredient.Carbohydrate">
+                                                                    @ingredient.Ingredient_Name
+                                                        </option>
+                                                            }
+                                                </select>
+                                                    }
+                                                    @if (Model.Allergies != null && Model.Allergies.Any())
+                                                    {
+                                                <select id="multiSelect" class="selectpicker form-control mb-2 py-3" multiple data-live-search="true" title="Choose allergy..." asp-for="SelectedAllergies">
+                                                            @foreach (var allergy in Model.Allergies)
+                                                            {
+                                                        <option value="@allergy.Allergy_Id">
+                                                                    @allergy.Allergy_Name
+                                                        </option>
+                                                            }
+
+                                                </select>
+                                                    }
+                                            </div>
+                                            <div class="modal-footer justify-content-center">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-success" id="SaveNewFood">Save</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                        }
+                    }
+                    else
+                    {
+                    <h2>No foods found</h2>
+                    }
+                   
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            var deleteToastEl = document.getElementById('deleteToast');
+            var addToastEl = document.getElementById('addToast');
+            var editToastEl = document.getElementById('editToast');
+
+            if (deleteToastEl && @Html.Raw(Json.Serialize(TempData["MessageDelete"] != null))) {
+                var deleteToast = new bootstrap.Toast(deleteToastEl);
+                deleteToast.show();
+            }
+
+            if (addToastEl && (@Html.Raw(Json.Serialize(TempData["MessageAdded"] != null)) || @Html.Raw(Json.Serialize(TempData["MessageUsed"] != null)))) {
+                var addToast = new bootstrap.Toast(addToastEl);
+                addToast.show();
+            }
+
+            if (editToastEl && @Html.Raw(Json.Serialize(TempData["MessageUpdated"] != null))) {
+                var editToast = new bootstrap.Toast(editToastEl);
+                editToast.show();
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var multiSelect = document.getElementById('multiSelect');
+            var calorieInput = document.getElementById('calorieInput');
+            var proteinInput = document.getElementById('proteinInput');
+            var fatInput = document.getElementById('fatInput');
+            var carbInput = document.getElementById('carbInput');
+
+            function updateNutrientValues() {
+                var selectedOptions = multiSelect.selectedOptions;
+                var totalCalories = 0, totalProtein = 0, totalFat = 0, totalCarb = 0;
+
+                for (var i = 0; i < selectedOptions.length; i++) {
+                    totalCalories += parseFloat(selectedOptions[i].getAttribute('data-calorie')) || 0;
+                    totalProtein += parseFloat(selectedOptions[i].getAttribute('data-protein')) || 0;
+                    totalFat += parseFloat(selectedOptions[i].getAttribute('data-fat')) || 0;
+                    totalCarb += parseFloat(selectedOptions[i].getAttribute('data-carb')) || 0;
+                }
+
+                calorieInput.value = totalCalories;
+                proteinInput.value = totalProtein;
+                fatInput.value = totalFat;
+                carbInput.value = totalCarb;
+            }
+
+            multiSelect.addEventListener('change', updateNutrientValues);
+        });
+    </script>
+}
+
+
+<div class="toast position-fixed bottom-0 end-0 p-3 text-bg-danger m-3 fs-6" role="alert" aria-live="assertive" aria-atomic="true" id="deleteToast">
+    <div class="d-flex">
+        <div class="toast-body">
+            <i class="fa-solid fa-trash"></i>
+            @if (TempData["MessageDelete"] != null)
+            {
+                @TempData["MessageDelete"]
+            }
+        </div>
+        <button type="button" class="btn-close me-2 m-auto btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+</div>
+
+<div class="toast position-fixed bottom-0 end-0 p-3 m-3 fs-6 @((TempData["MessageUsed"] != null) ? "text-bg-warning" : "text-bg-success")" role="alert" aria-live="assertive" aria-atomic="true" id="addToast">
+    <div class="d-flex">
+        <div class="toast-body">
+            @if (TempData["MessageAdded"] != null)
+            {
+                <i class="fa-solid fa-check"></i>
+                @TempData["MessageAdded"]
+            }
+            @if (TempData["MessageUsed"] != null)
+            {
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                @TempData["MessageUsed"]
+            }
+        </div>
+        <button type="button" class="btn-close me-2 m-auto @((TempData["MessageUsed"] != null) ? "btn-close" : "btn-close-white")" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+</div>
+
+<div class="toast position-fixed bottom-0 end-0 p-3 text-bg-info m-3 fs-6" role="alert" aria-live="assertive" aria-atomic="true" id="editToast">
+    <div class="d-flex">
+        <div class="toast-body">
+            <i class="fa-solid fa-pencil-alt"></i>
+            @if (TempData["MessageUpdated"] != null)
+            {
+                @TempData["MessageUpdated"]
+            }
+        </div>
+        <button type="button" class="btn-close me-2 m-auto btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+</div>

@@ -1,4 +1,4 @@
-﻿@model DieticianApp.Models.ViewModel.AdminFunctions.AddMedicinesViewModel
+﻿@model DieticianApp.Models.ViewModel.AdminFunctions.AddDiseaseViewModel
 
 <div class="container">
     <div class="row py-5">
@@ -18,31 +18,31 @@
                         <form>
                             <div class="input-group overflow-hidden">
                                 <input type="text" class="form-control" placeholder="Search ....">
-                                <span class="input-group-text auth-input"><a href=""><i class="fa-solid fa-magnifying-glass"></a></i></span>
+                                <span class="input-group-text auth-input"><a href=""><i class="fa-solid fa-magnifying-glass"></i></a></span>
                             </div>
                         </form>
                     </div>
                     <div class="col">
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalMedicine">
-                            Add new Medicine
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalDisease">
+                            Add new Disease
                         </button>
 
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <div class="modal fade" id="modalMedicine" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal fade" id="modalDisease" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Add new Medicine</h1>
+                                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Add new Disease</h1>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
-                                    <form asp-controller="AdminFunctions" asp-action="AddMedicine" method="post">
+                                    <form asp-controller="AdminFunctions" asp-action="AddDisease" method="post">
                                         <div class="modal-body">
-                                            <label class="form-label">Medicine name: </label>
-                                            <input class="form-control" asp-for="Medicine_Name" />
+                                            <label class="form-label">Disease name: </label>
+                                            <input class="form-control" asp-for="Disease_Name" value="" />
                                         </div>
                                         <div class="modal-footer justify-content-center">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            <button type="submit" class="btn btn-primary" id="addMedicine">Add</button>
+                                            <button type="submit" class="btn btn-primary" id="AddDisease">Add</button>
                                         </div>
                                     </form>
                                 </div>
@@ -50,66 +50,65 @@
                         </div>
                     </div>
 
-                    <span asp-validation-for="Medicine_Name" class="text-danger"></span>
+                    <span asp-validation-for="Disease_Name" class="text-danger"></span>
                 </div>
             </div>
 
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th scope="col">Medicine name</th>
+                        <th scope="col">Disease Name</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
                 <tbody class="table-group-divider">
-                    @if (Model.Medicines != null && Model.Medicines.Any())
+                    @if (Model.Diseases != null && Model.Diseases.Any())
                     {
-                        foreach (var medicine in Model.Medicines)
+                        foreach (var disease in Model.Diseases)
                         {
                             <tr>
-                                <td>@medicine.Medicine_Name</td>
+                                <td>@disease.Disease_Name</td>
                                 <td>
-                                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalDelete-@medicine.Medicine_Id">
+                                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalDelete-@disease.Disease_Id">
                                         <i class="fa-solid fa-trash"></i>
                                     </button>
-                                    <button class="btn btn-success" type="submit" data-bs-toggle="modal" data-bs-target="#modalEdit-@medicine.Medicine_Id">
+                                    <button class="btn btn-success" type="submit" data-bs-toggle="modal" data-bs-target="#modalEdit-@disease.Disease_Id">
                                         <i class="fa-solid fa-pen"></i>
                                     </button>
-                                    <div class="modal fade" id="modalDelete-@medicine.Medicine_Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                    <div class="modal fade" id="modalDelete-@disease.Disease_Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Delete Medicine</h1>
+                                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Delete Disease</h1>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    Are you sure to delete <b>@medicine.Medicine_Name</b>?
+                                                    Are you sure to delete <b>@disease.Disease_Name</b>?
                                                 </div>
-                                                <form asp-controller="AdminFunctions" asp-action="DeleteMedicine" method="post" asp-route-id="@medicine.Medicine_Id">
+                                                <form asp-controller="AdminFunctions" asp-action="DeleteDisease" method="post" asp-route-id="@disease.Disease_Id">
                                                     <div class="modal-footer justify-content-center">
                                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                        <button type="submit" class="btn btn-danger" id="DeleteMedicine">Delete</button>
+                                                        <button type="submit" class="btn btn-danger" id="DeleteDisease">Delete</button>
                                                     </div>
                                                 </form>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="modal fade" id="modalEdit-@medicine.Medicine_Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                    <div class="modal fade" id="modalEdit-@disease.Disease_Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit medicine</h1>
+                                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit disease</h1>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
-                                                <form asp-controller="AdminFunctions" asp-action="EditMedicine" method="post" asp-route-id="@medicine.Medicine_Id">
+                                                <form asp-controller="AdminFunctions" asp-action="EditDisease" method="post" asp-route-id="@disease.Disease_Id">
                                                     <div class="modal-body">
-                                                        <label class="form-label">Medicine name: </label>
-                                                        <label class="form-label">@medicine.Medicine_Name</label>
-                                                        <input class="form-control" asp-for="Medicine_Name" value="@medicine.Medicine_Name"/>
+                                                        <label class="form-label">Disease name: </label>
+                                                        <input class="form-control" asp-for="Disease_Name" value="@disease.Disease_Name"/>
                                                     </div>
                                                     <div class="modal-footer justify-content-center">
                                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                        <button type="submit" class="btn btn-success" id="SaveNewAllergy">Save</button>
+                                                        <button type="submit" class="btn btn-success" id="SaveNewDisease">Save</button>
                                                     </div>
                                                 </form>
                                             </div>
@@ -122,7 +121,7 @@
                     else
                     {
                         <tr>
-                            <td colspan="3">No Medicine found.</td>
+                            <td colspan="3">No disease found.</td>
                         </tr>
                     }
                 </tbody>
@@ -131,7 +130,6 @@
         </div>
     </div>
 </div>
-
 
 @section Scripts {
     <script>
@@ -202,4 +200,3 @@
         <button type="button" class="btn-close me-2 m-auto btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
 </div>
-
