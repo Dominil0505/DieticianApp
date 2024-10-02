@@ -1,4 +1,8 @@
-﻿@model DieticianApp.Models.ViewModel.AdminFunctions.AddFoodsViewModel
+﻿@model DieticianApp.Models.ViewModel.AdminFunctions.FoodsViewModel
+
+@{
+    ViewData["Title"] = "Foods";
+}
 <div class="container">
 <div class="row py-5">
     <div class="col-xl-10">
@@ -38,7 +42,7 @@
                                     <h1 class="modal-title fs-5" id="staticBackdropLabel">Add new Food</h1>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
-                                <form asp-controller="AdminFunctions" asp-action="addFood" method="post">
+                                    <form asp-controller="Food" asp-action="addFood" method="post">
                                     <div class="modal-body">
                                         <label class="form-label">Food name: </label>
                                         <input class="form-control" asp-for="Food_Name" value=""/>
@@ -46,19 +50,19 @@
                                         <div class="row">
                                             <div class="col-6 mb-2">
                                                 <label class="form-label">Calorie: </label>
-                                                <input class="form-control" id="calorieInput" type="number" min="0" value="0" asp-for="Calorie"/>
+                                                    <input class="form-control" id="calorieInput" type="number" min="0" value="0" asp-for="Calorie" step="0.01" />
                                             </div>
                                             <div class="col-6 mb-2">
                                                 <label class="form-label">Protein: </label>
-                                                <input class="form-control" id="proteinInput" type="number" min="0" value="0" asp-for="Protein"/>
+                                                    <input class="form-control" id="proteinInput" type="number" min="0" value="0" asp-for="Protein" step="0.01" />
                                             </div>
                                             <div class="col-6">
                                                 <label class="form-label">Fat: </label>
-                                                <input class="form-control" id="fatInput" type="number" min="0" value="0" asp-for="Fat"/>
+                                                    <input class="form-control" id="fatInput" type="number" min="0" value="0" asp-for="Fat" step="0.01" />
                                             </div>
                                             <div class="col-6">
                                                 <label class="form-label">Carbohydrate: </label>
-                                                <input class="form-control" id="carbInput" type="number" min="0" value="0" asp-for="Carbohydrate"/>
+                                                    <input class="form-control" id="carbInput" type="number" min="0" value="0" asp-for="Carbohydrate" step="0.01" />
                                             </div>
                                         </div>
                                         @if(Model.Ingredients != null && Model.Ingredients.Any())
@@ -133,8 +137,10 @@
                                             <div class="row">
                                                 <div class="mb-3">
                                             <li class="list-inline-item">
-                                                <span class="badge rounded-pill text-bg-success fs-1rem mb-2"> Calorie: @food.Calorie </span>
-                                                <span class="badge rounded-pill text-bg-success fs-1rem mb-2"> Protein: @food.Protein </span>
+                                                <span class="badge rounded-pill text-bg-success fs-1rem mb-2">Calorie: @food.Calorie </span>
+                                                <span class="badge rounded-pill text-bg-success fs-1rem mb-2">Protein: @food.Protein </span>
+                                            </li>
+                                            <li class="list-intline-item">
                                                 <span class="badge rounded-pill text-bg-success fs-1rem mb-2"> Fat: @food.Fat </span>
                                                 <span class="badge rounded-pill text-bg-success fs-1rem mb-2"> Carbohydrate: @food.Carbohydrate </span>
                                             </li>
@@ -142,9 +148,10 @@
                                         </div>
                                         </ul>
                                     
-                                        
                                         @if(food.FoodAllergies != null && food.FoodAllergies.Any())
                                         {
+                                            <hr />
+                                            <h5>Allergies</h5>
                                             <ul class="list-inline">
                                                 @foreach (var item in food.FoodAllergies)
                                                 {
@@ -154,6 +161,8 @@
                                         }
                                         @if(food.FoodIngredients != null && food.FoodIngredients.Any())
                                         {
+                                            <hr />
+                                            <h5>Ingredients</h5>
                                             <ul class="list-inline">
                                                 @foreach (var item in food.FoodIngredients)
                                                 {
@@ -173,7 +182,7 @@
                                         <div class="modal-body">
                                             Are you sure to delete <b>@food.Food_Name</b>?
                                         </div>
-                                        <form asp-controller="AdminFunctions" asp-action="DeleteFood" method="post" asp-route-id="@food.Food_Id">
+                                    <form asp-controller="Food" asp-action="DeleteFood" method="post" asp-route-id="@food.Food_Id">
                                             <div class="modal-footer justify-content-center">
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                                 <button type="submit" class="btn btn-danger" id="DeleteFood">Delete</button>
@@ -189,7 +198,7 @@
                                             <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit Food</h1>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
-                                        <form asp-controller="AdminFunctions" asp-action="EditFood" method="post" asp-route-id="@food.Food_Id">
+                                    <form asp-controller="Food" asp-action="EditFood" method="post" asp-route-id="@food.Food_Id">
                                             <div class="modal-body">
                                                 <label class="form-label">Food name: </label>
                                                 <input class="form-control" asp-for="Food_Name" placeholder="@food.Food_Name" />
@@ -197,19 +206,19 @@
                                             <div class="row">
                                                 <div class="col-6 mb-2">
                                                     <label class="form-label">Calorie: </label>
-                                                    <input class="form-control" id="calorieInput" type="number" min="0" value="@food.Calorie" asp-for="Calorie" />
+                                                    <input class="form-control" id="calorieInput" type="number" min="0" value="@food.Calorie" asp-for="Calorie" step="0.01"/>
                                                 </div>
                                                 <div class="col-6 mb-2">
                                                     <label class="form-label">Protein: </label>
-                                                    <input class="form-control" id="proteinInput" type="number" min="0" value="@food.Protein" asp-for="Protein" />
+                                                    <input class="form-control" id="proteinInput" type="number" min="0" value="@food.Protein" asp-for="Protein" step="0.01" />
                                                 </div>
                                                 <div class="col-6">
                                                     <label class="form-label">Fat: </label>
-                                                    <input class="form-control" id="fatInput" type="number" min="0" value="@food.Fat" asp-for="Fat" />
+                                                    <input class="form-control" id="fatInput" type="number" min="0" value="@food.Fat" asp-for="Fat" step="0.01" />
                                                 </div>
                                                 <div class="col-6">
                                                     <label class="form-label">Carbohydrate: </label>
-                                                    <input class="form-control" id="carbInput" type="number" min="0" value="@food.Carbohydrate" asp-for="Carbohydrate" />
+                                                    <input class="form-control" id="carbInput" type="number" min="0" value="@food.Carbohydrate" asp-for="Carbohydrate" step="0.01" />
                                                 </div>
                                             </div>
                                                     @if (Model.Ingredients != null && Model.Ingredients.Any())

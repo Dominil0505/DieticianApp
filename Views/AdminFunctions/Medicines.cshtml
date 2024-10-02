@@ -1,4 +1,8 @@
-﻿@model DieticianApp.Models.ViewModel.AdminFunctions.AddMedicinesViewModel
+﻿@model DieticianApp.Models.ViewModel.AdminFunctions.MedicinesViewModel
+
+@{
+    ViewData["Title"] = "Medicine";
+}
 
 <div class="container">
     <div class="row py-5">
@@ -35,7 +39,7 @@
                                         <h1 class="modal-title fs-5" id="staticBackdropLabel">Add new Medicine</h1>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
-                                    <form asp-controller="AdminFunctions" asp-action="AddMedicine" method="post">
+                                    <form asp-controller="Medicine" asp-action="AddMedicine" method="post">
                                         <div class="modal-body">
                                             <label class="form-label">Medicine name: </label>
                                             <input class="form-control" asp-for="Medicine_Name" />
@@ -54,79 +58,118 @@
                 </div>
             </div>
 
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th scope="col">Medicine name</th>
-                        <th scope="col">Action</th>
-                    </tr>
-                </thead>
-                <tbody class="table-group-divider">
-                    @if (Model.Medicines != null && Model.Medicines.Any())
-                    {
-                        foreach (var medicine in Model.Medicines)
-                        {
+            <div class="card bx-shadow">
+                <div class="card-header">
+                    <h4>Medicines</h4>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
                             <tr>
-                                <td>@medicine.Medicine_Name</td>
-                                <td>
-                                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalDelete-@medicine.Medicine_Id">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </button>
-                                    <button class="btn btn-success" type="submit" data-bs-toggle="modal" data-bs-target="#modalEdit-@medicine.Medicine_Id">
-                                        <i class="fa-solid fa-pen"></i>
-                                    </button>
-                                    <div class="modal fade" id="modalDelete-@medicine.Medicine_Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Delete Medicine</h1>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    Are you sure to delete <b>@medicine.Medicine_Name</b>?
-                                                </div>
-                                                <form asp-controller="AdminFunctions" asp-action="DeleteMedicine" method="post" asp-route-id="@medicine.Medicine_Id">
-                                                    <div class="modal-footer justify-content-center">
-                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                        <button type="submit" class="btn btn-danger" id="DeleteMedicine">Delete</button>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="modal fade" id="modalEdit-@medicine.Medicine_Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit medicine</h1>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <form asp-controller="AdminFunctions" asp-action="EditMedicine" method="post" asp-route-id="@medicine.Medicine_Id">
-                                                    <div class="modal-body">
-                                                        <label class="form-label">Medicine name: </label>
-                                                        <label class="form-label">@medicine.Medicine_Name</label>
-                                                        <input class="form-control" asp-for="Medicine_Name" value="@medicine.Medicine_Name"/>
-                                                    </div>
-                                                    <div class="modal-footer justify-content-center">
-                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                        <button type="submit" class="btn btn-success" id="SaveNewAllergy">Save</button>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
+                                <th class="fs-5">Medicine name</th>
+                                <th class="fs-5">Action</th>
                             </tr>
+                        </thead>
+                        <tbody class="table-group-divider">
+                            @if (Model.Medicines != null && Model.Medicines.Any())
+                            {
+                                foreach (var medicine in Model.Medicines)
+                                {
+                                    <tr>
+                                        <td class="fs-5">@medicine.Medicine_Name</td>
+                                        <td class="fs-5">
+                                            <a class="" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false"><i class="fa-solid fa-ellipsis-vertical"></i></a>
+                                            <ul class="dropdown-menu align-items-center">
+                                                <li>
+                                                    <a class="dropdown-item link-danger" href="" data-bs-toggle="modal" data-bs-target="#modalDelete-@medicine.Medicine_Id">
+                                                        Delete <i class="fa-solid fa-trash"></i>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item link-success" href="" type="submit" data-bs-toggle="modal" data-bs-target="#modalEdit-@medicine.Medicine_Id">
+                                                        Edit <i class="fa-solid fa-pen"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+
+                                            <div class="modal fade" id="modalDelete-@medicine.Medicine_Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Delete Medicine</h1>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            Are you sure to delete <b>@medicine.Medicine_Name</b>?
+                                                        </div>
+                                                        <form asp-controller="Medicine" asp-action="DeleteMedicine" method="post" asp-route-id="@medicine.Medicine_Id">
+                                                            <div class="modal-footer justify-content-center">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                <button type="submit" class="btn btn-danger" id="DeleteMedicine">Delete</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="modal fade" id="modalEdit-@medicine.Medicine_Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit Medicine</h1>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <form asp-controller="Medicine" asp-action="EditMedicine" method="post" asp-route-id="@medicine.Medicine_Id">
+                                                            <div class="modal-body">
+                                                                <label class="form-label">Medicine name: </label>
+                                                                <input class="form-control" asp-for="Medicine_Name" value="@medicine.Medicine_Name" />
+                                                            </div>
+                                                            <div class="modal-footer justify-content-center">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                <button type="submit" class="btn btn-success" id="SaveNewMedicine">Save</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="3" class="fw-bold fs-4">No Medicines found.</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+<nav class="nav justify-content-center">
+                    <ul class="pagination">
+                        @if (Model.CurrentPage > 1)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" href="@Url.Action("ListMedicine", new { pageNumber = Model.CurrentPage - 1 })">Previous</a>
+                            </li>
                         }
-                    }
-                    else
-                    {
-                        <tr>
-                            <td colspan="3">No Medicine found.</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+
+                        @for (int i = 1; i <= Model.TotalPages; i++)
+                        {
+                            <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                                <a class="page-link" href="@Url.Action("ListMedicine", new { pageNumber = i })">@i</a>
+                            </li>
+                        }
+
+                        @if (Model.CurrentPage < Model.TotalPages)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" href="@Url.Action("ListMedicine", new { pageNumber = Model.CurrentPage + 1 })">Next</a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
 
         </div>
     </div>

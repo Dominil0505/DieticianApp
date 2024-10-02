@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using DieticianApp.Helpers;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 
 namespace DieticianApp.Models.ViewModel.AdminFunctions
 {
-    public class AddPatientViewModel
+    public class PatientViewModel : Paginate
     {
         [Required(ErrorMessage = "Date of Birth is require")]
         public DateTime? DoB { get; set; }

@@ -1,3 +1,6 @@
+*{
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
 html {
     font-size: 14px;
 }
@@ -8,9 +11,10 @@ html {
   }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus {
+.btn:focus, .btn:active:focus, .btn-link .nav-link:focus {
     box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #9DC88D;
 }
+
 .form-control:focus, .form-check-input:focus {
     box-shadow: none !important;
 }
@@ -69,6 +73,10 @@ ul li a.dropdown-item:hover {
     color: black;
 }
 
+dropdown-item:active {
+    background-color: #719271 !important;
+}
+
 .header {
     background-color: #4D774E;
 }
@@ -93,4 +101,12 @@ textarea.form-control:focus {
 
 .fs-1rem {
   font-size: 1rem;
+}
+
+.bx-shadow {
+    box-shadow: 0 .25rem .75rem 0 rgba(34, 48, 62, .14);
+}
+
+.nav-link{
+    transition: 0.5s;
 }

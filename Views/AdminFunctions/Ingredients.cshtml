@@ -1,4 +1,7 @@
-﻿@model DieticianApp.Models.ViewModel.AdminFunctions.AddIngredientsViewModel
+﻿@model DieticianApp.Models.ViewModel.AdminFunctions.IngredientsViewModel
+@{
+    ViewData["Title"] = "Ingredients";
+}
 
 <div class="container">
     <div class="row py-5">
@@ -35,26 +38,26 @@
                                         <h3 class="modal-title" id="staticBackdropLabel">Add new Ingredient</h3>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
-                                    <form asp-controller="AdminFunctions" asp-action="AddIngredient" method="post">
+                                    <form asp-controller="Ingredient" asp-action="AddIngredient" method="post">
                                         <div class="modal-body">
                                             <label class="form-label">Ingredient name: </label>
                                             <input class="form-control" asp-for="Ingredient_Name" value="" placeholder="ex: carrot" />
                                             <div class="row">
                                                 <div class="col-6">
                                                     <label class="form-label">Calorie: </label>
-                                                    <input class="form-control" asp-for="Calorie" type="number" min="0" value="" placeholder="ex: 5"/>
+                                                    <input class="form-control" asp-for="Calorie" type="number" min="0" value="" placeholder="ex: 5" step="0.01"/>
                                                 </div>
                                                 <div class="col-6">
                                                     <label class="form-label">Protein: </label>
-                                                    <input class="form-control" asp-for="Protein" type="number" min="0" value="" placeholder="ex: 5" />
+                                                    <input class="form-control" asp-for="Protein" type="number" min="0" value="" placeholder="ex: 5" step="0.01" />
                                                 </div>
                                                 <div class="col-6">
                                                     <label class="form-label">Fat: </label>
-                                                    <input class="form-control" asp-for="Fat" type="number" min="0" value="" placeholder="ex: 5" />
+                                                    <input class="form-control" asp-for="Fat" type="number" min="0" value="" placeholder="ex: 5" step="0.01" />
                                                 </div>
                                                 <div class="col-6">
                                                     <label class="form-label">Carbohydrate: </label>
-                                                    <input class="form-control" asp-for="Carbohydrate" type="number" min="0" value="" placeholder="ex: 5" />
+                                                    <input class="form-control" asp-for="Carbohydrate" type="number" min="0" value="" placeholder="ex: 5" step="0.01" />
                                                 </div>
                                             </div>
                                         </div>
@@ -77,105 +80,137 @@
                 </div>
             </div>
 
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th scope="col">Ingredient name</th>
-                        <th scope="col">Calorie</th>
-                        <th scope="col">Protein</th>
-                        <th scope="col">Fat</th>
-                        <th scope="col">Carbohydrate</th>
-                        <th scope="col">Action</th>
-                    </tr>
-                </thead>
-                <tbody class="table-group-divider">
-                    @if (Model.Ingredient != null && Model.Ingredient.Any())
-                    {
-                        foreach (var ingredient in Model.Ingredient)
-                        {
+            <div class="card bx-shadow">
+                <div class="card-header">
+                    <h4>Ingredients</h4>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
                             <tr>
-                                <td>@ingredient.Ingredient_Name</td>
-                                <td>@ingredient.Calorie</td>
-                                <td>@ingredient.Protein</td>
-                                <td>@ingredient.Fat</td>
-                                <td>@ingredient.Carbohydrate</td>
-                                <td>
-                                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalDelete-@ingredient.Ingredient_Id">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </button>
-                                    <button class="btn btn-success" type="submit" data-bs-toggle="modal" data-bs-target="#modalEdit-@ingredient.Ingredient_Id">
-                                        <i class="fa-solid fa-pen"></i>
-                                    </button>
-                                    <div class="modal fade" id="modalDelete-@ingredient.Ingredient_Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Delete Ingredient</h1>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    Are you sure to delete <b>@ingredient.Ingredient_Name</b>?
-                                                </div>
-                                                <form asp-controller="AdminFunctions" asp-action="DeleteIngredient" method="post" asp-route-id="@ingredient.Ingredient_Id">
-                                                    <div class="modal-footer justify-content-center">
-                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                        <button type="submit" class="btn btn-danger" id="DeleteIngredient">Delete</button>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="modal fade" id="modalEdit-@ingredient.Ingredient_Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h3 class="modal-title" id="staticBackdropLabel">Edit allergy</h3>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <form asp-controller="AdminFunctions" asp-action="EditIngredient" method="post" asp-route-id="@ingredient.Ingredient_Id">
-                                                    <div class="modal-body">
-                                                        <label class="form-label">Ingredient name: </label>
-                                                        <input class="form-control mb-2" asp-for="Ingredient_Name" placeholder="@ingredient.Ingredient_Name" />
-
-                                                        <div class="row">
-                                                            <div class="col-6 mb-2">
-                                                                <label class="form-label">Calorie: </label>
-                                                                <input class="form-control" asp-for="Calorie" type="number" min="0" value="@ingredient.Calorie"/>
-                                                            </div>
-                                                            <div class="col-6 mb-2">
-                                                                <label class="form-label">Protein: </label>
-                                                                <input class="form-control" asp-for="Protein" type="number" min="0" value="@ingredient.Protein" />
-                                                            </div>
-                                                            <div class="col-6">
-                                                                <label class="form-label">Fat: </label>
-                                                                <input class="form-control" asp-for="Fat" type="number" min="0" value="@ingredient.Fat" />
-                                                            </div>
-                                                            <div class="col-6">
-                                                                <label class="form-label">Carbohydrate: </label>
-                                                                <input class="form-control" asp-for="Carbohydrate" type="number" min="0" value="@ingredient.Carbohydrate" />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal-footer justify-content-center">
-                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                        <button type="submit" class="btn btn-success" id="SaveNewAllergy">Save</button>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
+                                <th class="fs-5">Ingredient name</th>
+                                <th class="fs-5">Calorie</th>
+                                <th class="fs-5">Protein</th>
+                                <th class="fs-5">Fat</th>
+                                <th class="fs-5">Carbohydrate</th>
+                                <th class="fs-5">Action</th>
                             </tr>
+                        </thead>
+                        <tbody class="table-group-divider">
+                            @if (Model.Ingredient != null && Model.Ingredient.Any())
+                            {
+                                foreach (var ingredient in Model.Ingredient)
+                                {
+                                    <tr>
+                                        <td class="fs-5">@ingredient.Ingredient_Name</td>
+                                        <td class="fs-5">@ingredient.Calorie</td>
+                                        <td class="fs-5">@ingredient.Protein</td>
+                                        <td class="fs-5">@ingredient.Fat</td>
+                                        <td class="fs-5">@ingredient.Carbohydrate</td>
+                                        <td class="fs-5">
+                                            <a class="" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false"><i class="fa-solid fa-ellipsis-vertical"></i></a>
+                                            <ul class="dropdown-menu align-items-center">
+                                                <li>
+                                                    <a class="dropdown-item link-danger" href="" data-bs-toggle="modal" data-bs-target="#modalDelete-@ingredient.Ingredient_Id">
+                                                        Delete <i class="fa-solid fa-trash"></i>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item link-success" href="" type="submit" data-bs-toggle="modal" data-bs-target="#modalEdit-@ingredient.Ingredient_Id">
+                                                        Edit <i class="fa-solid fa-pen"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+
+                                            <div class="modal fade" id="modalDelete-@ingredient.Ingredient_Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Delete Ingredient</h1>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            Are you sure to delete <b>@ingredient.Ingredient_Name</b>?
+                                                        </div>
+                                                        <form asp-controller="Ingredient" asp-action="DeleteIngredient" method="post" asp-route-id="@ingredient.Ingredient_Id">
+                                                            <div class="modal-footer justify-content-center">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                <button type="submit" class="btn btn-danger" id="DeleteIngredient">Delete</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="modal fade" id="modalEdit-@ingredient.Ingredient_Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit Ingredient</h1>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <form asp-controller="Ingredient" asp-action="EditIngredient" method="post" asp-route-id="@ingredient.Ingredient_Id">
+                                                            <div class="modal-body">
+                                                                <label class="form-label">Ingredient name: </label>
+                                                                <input class="form-control" asp-for="Ingredient_Name" placeholder="@ingredient.Ingredient_Name" />
+                                                                <label class="form-label mt-2">Calorie: </label>
+                                                                <input class="form-control" asp-for="Calorie" type="number" value="@ingredient.Calorie" step="0.01" />
+                                                                <label class="form-label mt-2">Protein: </label>
+                                                                <input class="form-control" asp-for="Protein" type="number" value="@ingredient.Protein" step="0.01" />
+                                                                <label class="form-label mt-2">Fat: </label>
+                                                                <input class="form-control" asp-for="Fat" type="number" value="@ingredient.Fat" step="0.01" />
+                                                                <label class="form-label mt-2">Carbohydrate: </label>
+                                                                <input class="form-control" asp-for="Carbohydrate" type="number" value="@ingredient.Carbohydrate" step="0.01"/>
+                                                            </div>
+                                                            <div class="modal-footer justify-content-center">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                <button type="submit" class="btn btn-success" id="SaveNewIngredient">Save</button>
+                                                            </div>
+                                                        </form>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="6" class="fw-bold fs-4">No Ingredients found.</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <nav class="nav justify-content-center">
+                    <ul class="pagination">
+                        @if (Model.CurrentPage > 1)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" href="@Url.Action("ListIngredient", new { pageNumber = Model.CurrentPage - 1 })">Previous</a>
+                            </li>
                         }
-                    }
-                    else
-                    {
-                        <tr>
-                            <td colspan="6" class="fw-bold fs-4">No Ingredients found.</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+
+                        @for (int i = 1; i <= Model.TotalPages; i++)
+                        {
+                            <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                                <a class="page-link" href="@Url.Action("ListIngredient", new { pageNumber = i })">@i</a>
+                            </li>
+                        }
+
+                        @if (Model.CurrentPage < Model.TotalPages)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" href="@Url.Action("ListIngredient", new { pageNumber = Model.CurrentPage + 1 })">Next</a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+            </div>
+
 
         </div>
     </div>

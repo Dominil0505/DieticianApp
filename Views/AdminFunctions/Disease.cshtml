@@ -1,6 +1,6 @@
-﻿@model DieticianApp.Models.ViewModel.AdminFunctions.AllergyViewModel
+﻿@model DieticianApp.Models.ViewModel.AdminFunctions.DiseaseViewModel
 @{
-    ViewData["Title"] = "Allergy";
+    ViewData["Title"] = "Diseases";
 }
 
 <div class="container">
@@ -21,109 +21,111 @@
                         <form>
                             <div class="input-group overflow-hidden">
                                 <input type="text" class="form-control" placeholder="Search ....">
-                                <span class="input-group-text auth-input"><a href=""><i class="fa-solid fa-magnifying-glass"></a></i></span>
+                                <span class="input-group-text auth-input"><a href=""><i class="fa-solid fa-magnifying-glass"></i></a></span>
                             </div>
                         </form>
                     </div>
                     <div class="col">
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAllergy">
-                            Add new Allergy
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalDisease">
+                            Add new Disease
                         </button>
-                        
+
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <div class="modal fade" id="modalAllergy" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal fade" id="modalDisease" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Add new Allergy</h1>
+                                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Add new Disease</h1>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
-                                    <form asp-controller="Allergy" asp-action="AddAllergy" method="post">
+                                    <form asp-controller="Disease" asp-action="AddDisease" method="post">
                                         <div class="modal-body">
-                                            <label class="form-label">Allergy name: </label>
-                                            <input class="form-control" asp-for="AllergyName" value=""/>
+                                            <label class="form-label">Disease name: </label>
+                                            <input class="form-control" asp-for="Disease_Name" value="" />
                                         </div>
                                         <div class="modal-footer justify-content-center">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            <button type="submit" class="btn btn-primary">Add</button>
+                                            <button type="submit" class="btn btn-primary" id="AddDisease">Add</button>
                                         </div>
                                     </form>
                                 </div>
                             </div>
                         </div>
                     </div>
-                   
-                    <span asp-validation-for="AllergyName" class="text-danger"></span>
-                  
+
+                    <span asp-validation-for="Disease_Name" class="text-danger"></span>
                 </div>
             </div>
+
             <div class="card bx-shadow">
                 <div class="card-header">
-                    <h4>Allergies</h4>
+                    <h4>Diseases</h4>
                 </div>
                 <div class="card-body">
                     <table class="table">
                         <thead>
                             <tr>
-                                <th class="fs-5">Allergy name</th>
+                                <th class="fs-5">Disease Name</th>
                                 <th class="fs-5">Action</th>
                             </tr>
                         </thead>
                         <tbody class="table-group-divider">
-                            @if (Model.Allergies != null && Model.Allergies.Any())
+                            @if (Model.Diseases != null && Model.Diseases.Any())
                             {
-                                foreach (var allergy in Model.Allergies)
+                                foreach (var disease in Model.Diseases)
                                 {
                                     <tr>
-                                        <td class="fs-5">@allergy.Allergy_Name</td>
+                                        <td class="fs-5">@disease.Disease_Name</td>
                                         <td class="fs-5">
-                                            <a class="" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false"><i class="fa-solid fa-ellipsis-vertical"></i></a>
+                                            <a class="link-primary" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false"><i class="fa-solid fa-ellipsis-vertical"></i></a>
                                             <ul class="dropdown-menu align-items-center">
                                                 <li>
-                                                    <a class="dropdown-item link-danger" href="" data-bs-toggle="modal" data-bs-target="#modalDelete-@allergy.Allergy_Id">
+                                                    <a class="dropdown-item link-danger" href="" data-bs-toggle="modal" data-bs-target="#modalDelete-@disease.Disease_Id">
                                                         Delete <i class="fa-solid fa-trash"></i>
                                                     </a>
                                                 </li>
                                                 <li>
-                                                    <a class="dropdown-item link-success" href="" type="submit" data-bs-toggle="modal" data-bs-target="#modalEdit-@allergy.Allergy_Id">
+                                                    <a class="dropdown-item link-success" href="" data-bs-toggle="modal" data-bs-target="#modalEdit-@disease.Disease_Id">
                                                         Edit <i class="fa-solid fa-pen"></i>
                                                     </a>
                                                 </li>
                                             </ul>
-                                            <div class="modal fade" id="modalDelete-@allergy.Allergy_Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+
+                                            <div class="modal fade" id="modalDelete-@disease.Disease_Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Delete allergy</h1>
+                                                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Delete Disease</h1>
                                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            Are you sure to delete <b>@allergy.Allergy_Name</b>?
+                                                            Are you sure you want to delete <b>@disease.Disease_Name</b>?
                                                         </div>
-                                                        <form asp-controller="Allergy" asp-action="DeleteAllergy" method="post" asp-route-id="@allergy.Allergy_Id">
+                                                        <form asp-controller="Disease" asp-action="DeleteDisease" method="post" asp-route-id="@disease.Disease_Id">
                                                             <div class="modal-footer justify-content-center">
                                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                                <button type="submit" class="btn btn-danger" id="DeleteAllergy">Delete</button>
+                                                                <button type="submit" class="btn btn-danger" id="DeleteDisease">Delete</button>
                                                             </div>
                                                         </form>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="modal fade" id="modalEdit-@allergy.Allergy_Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+
+                                            <div class="modal fade" id="modalEdit-@disease.Disease_Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit allergy</h1>
+                                                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit Disease</h1>
                                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
-                                                        <form asp-controller="Allergy" asp-action="EditAllergy" method="post" asp-route-id="@allergy.Allergy_Id">
+                                                        <form asp-controller="Disease" asp-action="EditDisease" method="post" asp-route-id="@disease.Disease_Id">
                                                             <div class="modal-body">
-                                                                <label class="form-label">Allergy name: </label>
-                                                                <input class="form-control" asp-for="AllergyName" value="@allergy.Allergy_Name" />
+                                                                <label class="form-label">Disease name: </label>
+                                                                <input class="form-control" asp-for="Disease_Name" value="@disease.Disease_Name" />
                                                             </div>
                                                             <div class="modal-footer justify-content-center">
                                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                                <button type="submit" class="btn btn-success" id="SaveNewAllergy">Save</button>
+                                                                <button type="submit" class="btn btn-success" id="SaveNewDisease">Save</button>
                                                             </div>
                                                         </form>
                                                     </div>
@@ -136,7 +138,7 @@
                             else
                             {
                                 <tr>
-                                    <td colspan="3">No allergies found.</td>
+                                    <td colspan="3" class="fw-bold fs-4">No Diseases found.</td>
                                 </tr>
                             }
                         </tbody>
@@ -147,29 +149,32 @@
                         @if (Model.CurrentPage > 1)
                         {
                             <li class="page-item">
-                                <a class="page-link" href="@Url.Action("ListAllergy", new { pageNumber = Model.CurrentPage - 1 })">Previous</a>
+                                <a class="page-link" href="@Url.Action("ListDisease", new { pageNumber = Model.CurrentPage - 1 })">Previous</a>
                             </li>
                         }
 
                         @for (int i = 1; i <= Model.TotalPages; i++)
                         {
                             <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
-                                <a class="page-link" href="@Url.Action("ListAllergy", new { pageNumber = i })">@i</a>
+                                <a class="page-link" href="@Url.Action("ListDisease", new { pageNumber = i })">@i</a>
                             </li>
                         }
 
                         @if (Model.CurrentPage < Model.TotalPages)
                         {
                             <li class="page-item">
-                                <a class="page-link" href="@Url.Action("ListAllergy", new { pageNumber = Model.CurrentPage + 1 })">Next</a>
+                                <a class="page-link" href="@Url.Action("ListDisease", new { pageNumber = Model.CurrentPage + 1 })">Next</a>
                             </li>
                         }
                     </ul>
                 </nav>
             </div>
+
+
         </div>
     </div>
 </div>
+
 
 @section Scripts {
     <script>

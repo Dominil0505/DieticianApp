@@ -15,16 +15,16 @@ namespace DieticianApp.Models.Entities
         public string? Ingredient_Name { get; set; }
 
         [Required(ErrorMessage = "Calorie is required")]
-        public int? Calorie { get; set; }
+        public double? Calorie { get; set; }
 
         [Required(ErrorMessage = "Proteint is required")]
-        public int? Protein { get; set; }
+        public double? Protein { get; set; }
 
         [Required(ErrorMessage = "Fat is required")]
-        public int? Fat { get; set; }
+        public double? Fat { get; set; }
 
         [Required(ErrorMessage = "Carbohydrate is required")]
-        public int? Carbohydrate { get; set; }
+        public double? Carbohydrate { get; set; }
 
         // Relation
         public virtual ICollection<Food_Ingredients> FoodIngredients { get; set; } = new List<Food_Ingredients>();
@@ -33,7 +33,7 @@ namespace DieticianApp.Models.Entities
         {
         }
 
-        public Ingredient(string? ingredient_Name, int? calorie, int? protein, int? fat, int? carbohydrate)
+        public Ingredient(string? ingredient_Name, double? calorie, double? protein, double? fat, double? carbohydrate)
         {
             Ingredient_Name = ingredient_Name;
             Calorie = calorie;

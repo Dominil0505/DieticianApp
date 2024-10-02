@@ -1,14 +1,16 @@
 ﻿@model DieticianApp.Models.ViewModel.Profile.CompleteProfileViewModel
 
-@if (User.IsInRole("Patient"))
+@if (User.IsInRole("Patient") && Model.CompletedUser.Is_profile_completed == false)
 {
+
     <div class="container py-5">
         <div class="row d-flex justify-content-center">
             <div class="col-xl-10">
                 <div class="card" style="box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;">
                     <div class="card-body">
                         <h3 class="d-flex justify-content-center">Setup Your Account</h3>
-                        <form asp-controller="Profile" asp-action="CompleteProfile" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <form asp-controller="Account" asp-action="CompleteProfile" method="post">
                             <div class="row">
                                 <div class="col-lg-6 mb-3">
                                     <label class="form-label">Date of Birth</label>
@@ -42,14 +44,14 @@
                                             <option value="@disease.Disease_Id">
                                                 @disease.Disease_Name
                                             </option>
-                                        }   
+                                        }
 
                                     </select>
                                 </div>
                                 <div class="col-lg-6 mb-3">
                                     <label class="form-label">Medications</label>
                                     <select id="multiSelect" class="selectpicker form-control mb-2" multiple data-live-search="true" title="Choose medicine..." asp-for="SelectedMedicines">
-                                        @foreach(var medicine in Model.Medicines)
+                                        @foreach (var medicine in Model.Medicines)
                                         {
                                             <option value="@medicine.Medicine_Id">
                                                 @medicine.Medicine_Name
@@ -78,6 +80,11 @@
             </div>
         </div>
     </div>
+
+}
+else if (User.IsInRole("Patient") && Model.CompletedUser.Is_profile_completed == true)
+{
+    @await Html.PartialAsync("SecurePage")
 }
 @if (User.IsInRole("Dietician"))
 {
