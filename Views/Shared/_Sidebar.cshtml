@@ -1,4 +1,4 @@
-﻿@if (User.IsInRole("Patient"))
+﻿@* @if (User.IsInRole("Patient"))
 {
     <div class="customsidenav">
         <a href="#about"><img width="50" height="50" src="https://img.icons8.com/external-flatart-icons-lineal-color-flatarticons/64/external-diet-diet-and-nutrition-flatart-icons-lineal-color-flatarticons-1.png" alt="external-diet-diet-and-nutrition-flatart-icons-lineal-color-flatarticons-1" />Diet</a>
@@ -21,3 +21,68 @@
         <a href="#about">Diet</a>
     </div>
 }
+ *@
+
+    <!-- Sidebar scroll-->
+    <div>
+        <div class="brand-logo d-flex align-items-center justify-content-between">
+            <a href="./index.html" class="text-nowrap logo-img">
+                <img src="../assets/images/logos/dark-logo.svg" width="180" alt="">
+            </a>
+            <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
+                <i class="ti ti-x fs-8"></i>
+            </div>
+        </div>
+        <!-- Sidebar navigation-->
+        <nav class="sidebar-nav scroll-sidebar" data-simplebar="init">
+            <div class="simplebar-wrapper selected" style="margin: 0px -24px;">
+                <div class="simplebar-height-auto-observer-wrapper"><div class="simplebar-height-auto-observer"></div></div><div class="simplebar-mask selected">
+                    <div class="simplebar-offset selected" style="right: 0px; bottom: 0px;">
+                        <div class="simplebar-content-wrapper selected" tabindex="0" role="region" aria-label="scrollable content" style="height: 100%; overflow: hidden scroll;">
+                            <div class="simplebar-content selected" style="padding: 0px 24px;">
+                                <ul id="sidebarnav" class="in">
+                                    @if (User.IsInRole("Patient"))
+                                    {
+                                        <li class="sidebar-item">
+                                        <a class="sidebar-link text-white" href="#about"> <i class="fa-solid fa-calendar-week"></i>Diet</a>
+                                        </li>
+                                    }
+
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                    <li class="sidebar-item">
+                                        <a class="sidebar-link text-white" asp-controller="Food" asp-action="ListFood"> <i class="fa-solid fa-utensils"></i> Foods </a>
+                                        </li>
+                                    <li class="sidebar-item">
+                                        <a class="sidebar-link text-white" asp-controller="Allergy" asp-action="ListAllergy"> <i class="fa-solid fa-hand-dots"></i> Allergies</a>
+                                        </li>
+                                    <li class="sidebar-item">
+                                        <a class="sidebar-link text-white" asp-controller="Ingredient" asp-action="ListIngredient"><i class="fa-solid fa-egg"></i> Ingredients</a>
+                                        </li>
+                                    <li class="sidebar-item">
+                                        <a class="sidebar-link text-white" asp-controller="Medicine" asp-action="ListMedicine"><i class="fa-solid fa-tablets"></i> Medicines</a>
+                                        </li>
+                                    <li class="sidebar-item">
+                                        <a class="sidebar-link text-white" asp-controller="Disease" asp-action="ListDisease"><i class="fa-solid fa-disease"></i> Disease </a>
+                                        </li>
+                                    <li class="sidebar-item">
+                                        <a class="sidebar-link text-white" asp-controller="Patient" asp-action="ListPatient"><i class="fa-solid fa-person"></i> Patients</a>
+                                        </li>
+                                    }
+
+                                    @if (User.IsInRole("Dietician"))
+                                    {
+                                    <li class="sidebar-item">
+                                        <a class="sidebar-link text-white" href="#about">Diet</a>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div><div class="simplebar-placeholder" style="width: auto; height: 888px;"></div>
+            </div><div class="simplebar-track simplebar-horizontal" style="visibility: hidden;"><div class="simplebar-scrollbar" style="width: 0px; display: none;"></div></div><div class="simplebar-track simplebar-vertical" style="visibility: visible;"><div class="simplebar-scrollbar" style="height: 870px; transform: translate3d(0px, 0px, 0px); display: block;"></div></div>
+        </nav>
+        <!-- End Sidebar navigation -->
+    </div>
+    <!-- End Sidebar scroll-->

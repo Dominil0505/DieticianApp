@@ -1,0 +1,594 @@
+﻿@charset "UTF-8";
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap");
+/*!
+ * Bootstrap  v5.3.0-alpha1 (https://getbootstrap.com/)
+ * Copyright 2011-2022 The Bootstrap Authors
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+ */ @import "../libs/simplebar/dist/simplebar.css";
+@import "../css/icons/tabler-icons/tabler-icons.css";
+
+.left-sidebar {
+    width: 270px;
+    background-color: #fff;
+    position: absolute;
+    -webkit-transition: 0.2s ease-in;
+    transition: 0.2s ease-in;
+    height: 100%;
+    z-index: 11;
+    border-right: 1px solid rgb(229,234,239)
+}
+
+    .left-sidebar .scroll-sidebar {
+        overflow-y: auto;
+        padding: 0 24px;
+        height: calc(100vh - 80px);
+        border-radius: 7px
+    }
+
+        .left-sidebar .scroll-sidebar .simplebar-track.simplebar-horizontal {
+            visibility: hidden !important
+        }
+
+.brand-logo {
+    min-height: 70px;
+    padding: 0 24px
+}
+
+.unlimited-access {
+    padding: 18px 22px 25px;
+    margin: 0 -5px
+}
+
+    .unlimited-access .unlimited-access-img {
+        margin: -35px -5px 0 -43px
+    }
+
+.nav-small-cap {
+    margin-top: 24px;
+    color: #2A3547;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 3px 12px;
+    line-height: 26px;
+    text-transform: uppercase
+}
+
+    .nav-small-cap .nav-small-cap-icon {
+        display: none
+    }
+
+.sidebar-nav ul .sidebar-item .sidebar-link {
+    color: #2A3547;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    font-size: 16px;
+    white-space: nowrap;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    line-height: 25px;
+    position: relative;
+    margin: 0px 0px 2px;
+    padding: 10px;
+    border-radius: 7px;
+    gap: 15px;
+    font-weight: 400
+}
+
+    .sidebar-nav ul .sidebar-item .sidebar-link span:first-child {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex
+    }
+
+    .sidebar-nav ul .sidebar-item .sidebar-link .ti {
+        -ms-flex-negative: 0;
+        flex-shrink: 0;
+        font-size: 21px
+    }
+
+    .sidebar-nav ul .sidebar-item .sidebar-link:hover {
+        background-color: rgba(93,135,255,0.1);
+        color: #5D87FF
+    }
+
+        .sidebar-nav ul .sidebar-item .sidebar-link:hover.has-arrow:after {
+            border-color: #5D87FF
+        }
+
+    .sidebar-nav ul .sidebar-item .sidebar-link.active:hover.has-arrow:after {
+        border-color: #fff
+    }
+
+.sidebar-nav ul .sidebar-item .link-disabled {
+    opacity: 0.38
+}
+
+.sidebar-nav ul .sidebar-item.selected > .sidebar-link, .sidebar-nav ul .sidebar-item.selected > .sidebar-link.active, .sidebar-nav ul .sidebar-item > .sidebar-link.active {
+    background-color: #5D87FF;
+    color: #fff
+}
+
+.sidebar-nav .sidebar-list .sidebar-list-item {
+    padding: 8px 0
+}
+
+
+.simplebar-scrollbar:before {
+    background: rgba(0,0,0,0.5) !important
+}
+
+#main-wrapper[data-layout=vertical][data-sidebar-position=fixed] .left-sidebar {
+    position: fixed;
+    top: 0
+}
+
+#main-wrapper[data-layout=vertical][data-header-position=fixed] .app-header {
+    position: fixed;
+    z-index: 10
+}
+
+
+@media (min-width:1200px) {
+    #main-wrapper[data-layout=vertical][data-header-position=fixed][data-sidebartype=mini-sidebar] .app-header {
+        width: 100%
+    }
+
+    #main-wrapper[data-layout=vertical][data-header-position=fixed] .app-header {
+        width: calc(100% - 270px)
+    }
+
+    #main-wrapper[data-layout=vertical][data-sidebartype=full] .body-wrapper {
+        margin-left: 270px
+    }
+}
+
+@media (max-width:1199px) {
+    #main-wrapper[data-layout=vertical][data-sidebartype=full] .left-sidebar, #main-wrapper[data-layout=vertical][data-sidebartype=mini-sidebar] .left-sidebar {
+        left: -270px
+    }
+
+    #main-wrapper[data-layout=vertical][data-sidebartype=full].show-sidebar .left-sidebar, #main-wrapper[data-layout=vertical][data-sidebartype=mini-sidebar].show-sidebar .left-sidebar {
+        left: 0
+    }
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box
+}
+
+a {
+    text-decoration: none
+}
+
+    a:hover {
+        color: #5D87FF
+    }
+
+ul {
+    list-style: none;
+    padding-left: 0
+}
+
+[data-simplebar] {
+    position: relative;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-content: flex-start;
+    align-items: flex-start;
+}
+
+.simplebar-wrapper {
+    overflow: hidden;
+    width: inherit;
+    height: inherit;
+    max-width: inherit;
+    max-height: inherit;
+}
+
+.simplebar-mask {
+    direction: inherit;
+    position: absolute;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: auto !important;
+    height: auto !important;
+    z-index: 0;
+}
+
+.simplebar-offset {
+    direction: inherit !important;
+    box-sizing: inherit !important;
+    resize: none !important;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    padding: 0;
+    margin: 0;
+    -webkit-overflow-scrolling: touch;
+}
+
+.simplebar-content-wrapper {
+    direction: inherit;
+    box-sizing: border-box !important;
+    position: relative;
+    display: block;
+    height: 100%; /* Required for horizontal native scrollbar to not appear if parent is taller than natural height */
+    width: auto;
+    max-width: 100%; /* Not required for horizontal scroll to trigger */
+    max-height: 100%; /* Needed for vertical scroll to trigger */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+    .simplebar-content-wrapper::-webkit-scrollbar,
+    .simplebar-hide-scrollbar::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+    }
+
+.simplebar-content:before,
+.simplebar-content:after {
+    content: ' ';
+    display: table;
+}
+
+.simplebar-placeholder {
+    max-height: 100%;
+    max-width: 100%;
+    width: 100%;
+    pointer-events: none;
+}
+
+.simplebar-height-auto-observer-wrapper {
+    box-sizing: inherit !important;
+    height: 100%;
+    width: 100%;
+    max-width: 1px;
+    position: relative;
+    float: left;
+    max-height: 1px;
+    overflow: hidden;
+    z-index: -1;
+    padding: 0;
+    margin: 0;
+    pointer-events: none;
+    flex-grow: inherit;
+    flex-shrink: 0;
+    flex-basis: 0;
+}
+
+.simplebar-height-auto-observer {
+    box-sizing: inherit;
+    display: block;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 1000%;
+    width: 1000%;
+    min-height: 1px;
+    min-width: 1px;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.simplebar-track {
+    z-index: 1;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+[data-simplebar].simplebar-dragging .simplebar-content {
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+[data-simplebar].simplebar-dragging .simplebar-track {
+    pointer-events: all;
+}
+
+.simplebar-scrollbar {
+    position: absolute;
+    left: 0;
+    right: 0;
+    min-height: 10px;
+}
+
+    .simplebar-scrollbar:before {
+        position: absolute;
+        content: '';
+        background: black;
+        border-radius: 7px;
+        left: 2px;
+        right: 2px;
+        opacity: 0;
+        transition: opacity 0.2s linear;
+    }
+
+    .simplebar-scrollbar.simplebar-visible:before {
+        /* When hovered, remove all transitions from drag handle */
+        opacity: 0.5;
+        transition: opacity 0s linear;
+    }
+
+.simplebar-track.simplebar-vertical {
+    top: 0;
+    width: 11px;
+}
+
+    .simplebar-track.simplebar-vertical .simplebar-scrollbar:before {
+        top: 2px;
+        bottom: 2px;
+    }
+
+.simplebar-track.simplebar-horizontal {
+    left: 0;
+    height: 11px;
+}
+
+    .simplebar-track.simplebar-horizontal .simplebar-scrollbar:before {
+        height: 100%;
+        left: 2px;
+        right: 2px;
+    }
+
+    .simplebar-track.simplebar-horizontal .simplebar-scrollbar {
+        right: auto;
+        left: 0;
+        top: 2px;
+        height: 7px;
+        min-height: 0;
+        min-width: 10px;
+        width: auto;
+    }
+
+[data-simplebar-direction='rtl'] .simplebar-track.simplebar-vertical {
+    right: auto;
+    left: 0;
+}
+
+
+.simplebar-hide-scrollbar {
+    position: fixed;
+    left: 0;
+    visibility: hidden;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+[data-simplebar] {
+    position: relative;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-content: flex-start;
+    align-items: flex-start
+}
+
+.simplebar-wrapper {
+    overflow: hidden;
+    width: inherit;
+    height: inherit;
+    max-width: inherit;
+    max-height: inherit
+}
+
+.simplebar-mask {
+    direction: inherit;
+    position: absolute;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: auto !important;
+    height: auto !important;
+    z-index: 0
+}
+
+.simplebar-offset {
+    direction: inherit !important;
+    box-sizing: inherit !important;
+    resize: none !important;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    padding: 0;
+    margin: 0;
+    -webkit-overflow-scrolling: touch
+}
+
+.simplebar-content-wrapper {
+    direction: inherit;
+    box-sizing: border-box !important;
+    position: relative;
+    display: block;
+    height: 100%;
+    width: auto;
+    max-width: 100%;
+    max-height: 100%;
+    scrollbar-width: none;
+    -ms-overflow-style: none
+}
+
+    .simplebar-content-wrapper::-webkit-scrollbar, .simplebar-hide-scrollbar::-webkit-scrollbar {
+        width: 0;
+        height: 0
+    }
+
+.simplebar-content:after, .simplebar-content:before {
+    content: ' ';
+    display: table
+}
+
+.simplebar-placeholder {
+    max-height: 100%;
+    max-width: 100%;
+    width: 100%;
+    pointer-events: none
+}
+
+.simplebar-height-auto-observer-wrapper {
+    box-sizing: inherit !important;
+    height: 100%;
+    width: 100%;
+    max-width: 1px;
+    position: relative;
+    float: left;
+    max-height: 1px;
+    overflow: hidden;
+    z-index: -1;
+    padding: 0;
+    margin: 0;
+    pointer-events: none;
+    flex-grow: inherit;
+    flex-shrink: 0;
+    flex-basis: 0
+}
+
+.simplebar-height-auto-observer {
+    box-sizing: inherit;
+    display: block;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 1000%;
+    width: 1000%;
+    min-height: 1px;
+    min-width: 1px;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: -1
+}
+
+.simplebar-track {
+    z-index: 1;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    overflow: hidden
+}
+
+[data-simplebar].simplebar-dragging .simplebar-content {
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-select: none
+}
+
+[data-simplebar].simplebar-dragging .simplebar-track {
+    pointer-events: all
+}
+
+.simplebar-scrollbar {
+    position: absolute;
+    left: 0;
+    right: 0;
+    min-height: 10px
+}
+
+    .simplebar-scrollbar:before {
+        position: absolute;
+        content: '';
+        background: #000;
+        border-radius: 7px;
+        left: 2px;
+        right: 2px;
+        opacity: 0;
+        transition: opacity .2s linear
+    }
+
+    .simplebar-scrollbar.simplebar-visible:before {
+        opacity: .5;
+        transition: opacity 0s linear
+    }
+
+.simplebar-track.simplebar-vertical {
+    top: 0;
+    width: 11px
+}
+
+    .simplebar-track.simplebar-vertical .simplebar-scrollbar:before {
+        top: 2px;
+        bottom: 2px
+    }
+
+.simplebar-track.simplebar-horizontal {
+    left: 0;
+    height: 11px
+}
+
+    .simplebar-track.simplebar-horizontal .simplebar-scrollbar:before {
+        height: 100%;
+        left: 2px;
+        right: 2px
+    }
+
+    .simplebar-track.simplebar-horizontal .simplebar-scrollbar {
+        right: auto;
+        left: 0;
+        top: 2px;
+        height: 7px;
+        min-height: 0;
+        min-width: 10px;
+        width: auto
+    }
+
+[data-simplebar-direction=rtl] .simplebar-track.simplebar-vertical {
+    right: auto;
+    left: 0
+}
+
+.hs-dummy-scrollbar-size {
+    direction: rtl;
+    position: fixed;
+    opacity: 0;
+    visibility: hidden;
+    height: 500px;
+    width: 500px;
+    overflow-y: hidden;
+    overflow-x: scroll
+}
+
+.simplebar-hide-scrollbar {
+    position: fixed;
+    left: 0;
+    visibility: hidden;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    -ms-overflow-style: none
+}
+
+.custom-div {
+    --bs-gutter-x: 24px;
+    --bs-gutter-y: 0;
+    width: 100%;
+    padding-right: calc(var(--bs-gutter-x)* 0.5);
+    padding-left: calc(var(--bs-gutter-x)* 0.5);
+    margin-right: auto;
+    margin-left: auto;
+}

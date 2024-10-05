@@ -1,6 +1,10 @@
 ﻿@model DieticianApp.Models.ViewModel.Profile.CompleteProfileViewModel
 
-@if (User.IsInRole("Patient") && Model.CompletedUser.Is_profile_completed == false)
+@{
+    ViewData["Title"] = "Setup account";
+}
+
+@if (User.IsInRole("Patient"))
 {
 
     <div class="container py-5">
@@ -9,6 +13,7 @@
                 <div class="card" style="box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;">
                     <div class="card-body">
                         <h3 class="d-flex justify-content-center">Setup Your Account</h3>
+                        <h1></h1>
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <form asp-controller="Account" asp-action="CompleteProfile" method="post">
                             <div class="row">
@@ -81,16 +86,4 @@
         </div>
     </div>
 
-}
-else if (User.IsInRole("Patient") && Model.CompletedUser.Is_profile_completed == true)
-{
-    @await Html.PartialAsync("SecurePage")
-}
-@if (User.IsInRole("Dietician"))
-{
-    <p>sadadadsadasd</p>
-}
-@if (User.IsInRole("Admin"))
-{
-    @await Html.PartialAsync("SecurePage")
 }

@@ -1,0 +1,40 @@
+﻿@model DieticianApp.Models.ViewModel.Patient.PendingPatientViewModel
+
+@{
+    ViewData["Title"] = "Pending...";
+}
+
+@if (User.IsInRole("Patient"))
+{
+    <h3>Thanks for setup youre account, please choose a dietician</h3>
+    <div class="row">
+        @if (Model.Users != null && Model.Users.Any())
+        {
+            @foreach (var diet in Model.Users)
+            {
+                <div class="col-xxl-3 col-sm-6">
+                    <div class="col">
+                        <div class="card">
+                            <div class="card-body p-4">
+                                <div class="mb-4">
+                                    <div class="avatar-lg mx-auto img-thumbnail rounded-circle mb-4"><img src="assets/images/users/avatar-2.jpg" alt="" class="member-img img-fluid d-block rounded-circle"></div>
+                                    <div class="text-center">
+                                        <h5 class="fs-lg mb-2 text-primary" style="color: #4D774E !important;">@diet.User_Name</h5>
+                                        <p class="text-muted fs-md member-designation mb-0">Dietician</p>
+                                    </div>
+                                </div>
+
+                                <div class="text-center">
+                                    <button class="btn btn-outline-primary">Choose</button>
+                                </div>
+                            </div>
+                            <!-- end card-body -->
+                        </div>
+                        <!-- end card -->
+                    </div>
+                </div>
+            }
+        }
+    </div>
+
+}

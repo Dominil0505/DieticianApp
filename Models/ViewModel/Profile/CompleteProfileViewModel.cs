@@ -23,6 +23,7 @@ namespace DieticianApp.Models.ViewModel.Profile
         public List<int> SelectedDiseases { get; set; } = new List<int>();
         public List<int> SelectedMedicines { get; set; } = new List<int>();
 
+        public List<Patients> Patients { get; set; } = new List<Patients>();
         public List<Allergies> Allergies { get; set; } = new List<Allergies>(); 
         public List<Diseases> Diseases { get; set; } = new List<Diseases>();
         public List<Medicines> Medicines { get; set; } = new List<Medicines>();

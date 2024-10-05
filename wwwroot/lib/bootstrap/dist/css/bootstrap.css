@@ -3671,6 +3671,7 @@ textarea.form-control-lg {
 }
 .nav-link:hover, .nav-link:focus {
     background-color: #719271;
+    color: white !important;
     border-radius: 10px;
 }
 .nav-link.disabled {
@@ -8090,8 +8091,8 @@ textarea.form-control-lg {
 
 /* rtl:end:remove */
 .text-primary {
-  --bs-text-opacity: 1;
-  color: rgba(var(--bs-primary-rgb), var(--bs-text-opacity)) !important;
+    --bs-text-opacity: 1;
+    color: #4D774E !important;
 }
 
 .text-secondary {

@@ -11,6 +11,8 @@ using DieticianApp.Models.JoinTables;
 using DieticianApp.Models.ViewModel;
 using DieticianApp.Models.ViewModel.Profile;
 using Humanizer;
+using System.Diagnostics;
+using DieticianApp.Models.ViewModel.Patient;
 
 namespace DieticianApp.Controllers
 {
@@ -21,6 +23,38 @@ namespace DieticianApp.Controllers
         public AccountController(AppDbContext context)
         {
             _context = context;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            if (User.IsInRole("Patient"))
+            {
+                var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+                var patient = await _context.Patients.Where(_ => _.User_Id == userId).FirstOrDefaultAsync();
+                
+                if(patient.Dietician_Id == null)
+                {
+                    var dietRole = await _context.Roles.FirstOrDefaultAsync(_ => _.Role_Name == "Dietician");
+                    var dietUserRole = await _context.User_Roles.FirstOrDefaultAsync(_ => _.RoleId == dietRole.Role_Id);
+
+                    var dietUser = _context.Users
+                    .Where(_ => _.User_Id == dietUserRole.UserId)
+                    .ToList();
+
+                    var model = new PendingPatientViewModel(dietUser);
+                    return View("Views/Patient/PendingPatient.cshtml", model);
+                }
+                else
+                {
+                    return View("Index", "Home");
+                }
+            }
+            else
+            {
+                return View("Index", "Home");
+            }
+            
         }
 
         public IActionResult Registration()
@@ -36,17 +70,19 @@ namespace DieticianApp.Controllers
         [Authorize]
         public async Task<IActionResult> CompleteProfile()
         {
+            
             var allergies = await _context.Allergy.ToListAsync();
             var diseases = await _context.Diseases.ToListAsync();
             var medicines = await _context.Medicines.ToListAsync();
             var completedUser = await _context.Users.Where(_ => _.Is_profile_completed == false).FirstOrDefaultAsync();
+            var patients = await _context.Patients.ToListAsync();
 
             var viewModel = new CompleteProfileViewModel
             {
                 Allergies = allergies ?? new List<Allergies>(),
                 Diseases = diseases ?? new List<Diseases>(),
                 Medicines = medicines ?? new List<Medicines>(),
-                CompletedUser = completedUser
+                Patients = patients ?? new List<Patients>()
             };
 
             return View("CompleteProfile", viewModel);
@@ -79,9 +115,11 @@ namespace DieticianApp.Controllers
                                 var role = _context.Roles.Where(_ => _.Role_Name == "Dietician").FirstOrDefault();
                                 Dieticians dietician = new Dieticians(user.User_Id);
                                 User_Roles user_roles = new User_Roles(user.User_Id, role.Role_Id);
+                                user.Is_profile_completed = true;
 
                                 _context.Dieticians.Add(dietician);
                                 _context.User_Roles.Add(user_roles);
+                                _context.Users.Update(user);
                                 _context.SaveChanges();
                                 ViewBag.Message = $"{user.User_Name} registered successfully. Please login";
                             }
@@ -108,7 +146,7 @@ namespace DieticianApp.Controllers
                             {
                                 ModelState.AddModelError("", $"Something is wrong: ->  {e.Message}");
                             }
-                            
+
                         }
                         else if (model.Role == "Admin")
                         {
@@ -119,9 +157,12 @@ namespace DieticianApp.Controllers
                                 {
                                     Admins admin = new Admins(user.User_Id);
                                     User_Roles user_roles = new User_Roles(user.User_Id, role.Role_Id);
+                                    user.Is_profile_completed = true;
 
                                     _context.Admins.Add(admin);
                                     _context.User_Roles.Add(user_roles);
+                                    _context.Users.Update(user);
+
                                     _context.SaveChanges();
                                     ModelState.Clear();
                                     ViewBag.Message = $"{user.User_Name} registered successfully. Please login";
@@ -173,7 +214,9 @@ namespace DieticianApp.Controllers
                         new Claim(ClaimTypes.Name, user.User_Name),
                         new Claim("Name", user.User_Name),
                         new Claim(ClaimTypes.Email, user.Email),
-                        new Claim("Email", user.User_Name)
+                        new Claim("Email", user.User_Name),
+                        // Save ID
+                        new Claim(ClaimTypes.NameIdentifier, user.User_Id.ToString())
                     };
 
                     foreach (var userRole in user.UserRoles)
@@ -183,7 +226,17 @@ namespace DieticianApp.Controllers
 
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
-                    return RedirectToAction("CompleteProfile");
+
+                    if(user.Is_profile_completed == true)
+                    {
+                        return RedirectToAction(nameof(Index));
+                    }
+                    else
+                    {
+                        return RedirectToAction(nameof(CompleteProfile));
+                    }
+                    
+
                 }
                 else
                 {
@@ -203,89 +256,66 @@ namespace DieticianApp.Controllers
         [HttpPost]
         public async Task<IActionResult> CompleteProfile(CompleteProfileViewModel model)
         {
-            if (model != null)
+
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            var patient = await _context.Patients.Where(_ => _.User_Id == userId).FirstOrDefaultAsync();
+            var user = await _context.Users.FindAsync(userId);
+
+            if (patient != null)
             {
-                var userEmail = User.FindFirstValue(ClaimTypes.Email);
-                if(userEmail != null) 
+                // Update basic patient details
+                patient.DoB = model.DoB;
+                patient.Height = model.Height;
+                patient.Weight = model.Weight;
+                patient.Gender = model.Gender;
+
+                user.Is_profile_completed = true;
+
+                _context.Users.Update(user);
+                _context.Patients.Update(patient);
+
+                // Allergies update
+                if (model.SelectedAllergies != null && model.SelectedAllergies.Any())
                 {
-                    try
+                    foreach (var allergyId in model.SelectedAllergies)
                     {
-                        var user = await _context.Users.Where(_ => _.Email == userEmail).FirstOrDefaultAsync();
-                        var patient = await _context.Patients.Where(_ => _.User_Id == user.User_Id).FirstOrDefaultAsync();
-
-                        if (patient != null)
-                        {
-
-                            patient.DoB = model.DoB;
-                            patient.Height = model.Height;
-                            patient.Weight = model.Weight;
-                            patient.Gender = model.Gender;
-                            user.Is_profile_completed = true;
-
-                            _context.Patients.Update(patient);
-                            _context.Users.Update(user);
-
-
-                            if (model.SelectedAllergies != null && model.SelectedAllergies.Any())
-                            {
-                                foreach (var allergyId in model.SelectedAllergies)
-                                {
-                                    Patient_Allergies patinet_allergies = new Patient_Allergies(user.Patients.Patient_Id, allergyId);
-                                    await _context.Patient_Allergies.AddAsync(patinet_allergies);
-                                }
-                            }
-
-                            if (model.SelectedDiseases != null && model.SelectedDiseases.Any())
-                            {
-                                foreach (var diseaseId in model.SelectedDiseases)
-                                {
-                                    Patient_Disease patinet_disease = new Patient_Disease(user.Patients.Patient_Id, diseaseId);
-                                    await _context.Patient_Diseases.AddAsync(patinet_disease);
-                                }
-                            }
-
-                            if (model.SelectedMedicines != null && model.SelectedMedicines.Any())
-                            {
-                                foreach (var medicationId in model.SelectedMedicines)
-                                {
-                                    Patient_Medication patinet_medication = new Patient_Medication(user.Patients.Patient_Id, medicationId);
-                                    await _context.patient_Medications.AddAsync(patinet_medication);
-                                }
-                            }
-
-                            await _context.SaveChangesAsync();
-                            return RedirectToAction("Index");
-                        }
-                        else
-                        {
-                            ModelState.AddModelError("", $"Patient is null");
-                        }
-                    }
-                    catch (DbUpdateException e)
-                    {
-
-                        ModelState.AddModelError("", $"Something went wrong, error: {e.Message}");
+                        var patientAllergy = new Patient_Allergies(patient.Patient_Id, allergyId);
+                        _context.Patient_Allergies.Add(patientAllergy);
                     }
                 }
-                else
+
+                // Diseases update
+                if (model.SelectedDiseases != null && model.SelectedDiseases.Any())
                 {
-                    ModelState.AddModelError("", $"No user found in the database email: {userEmail}");
+                    foreach (var diseaseId in model.SelectedDiseases)
+                    {
+                        var patientDisease = new Patient_Disease(patient.Patient_Id, diseaseId);
+                        _context.Patient_Diseases.Add(patientDisease);
+                    }
                 }
 
+                // Medications update
+                if (model.SelectedMedicines != null && model.SelectedMedicines.Any())
+                {
+                    foreach (var medicationId in model.SelectedMedicines)
+                    {
+                        var patientMedication = new Patient_Medication(patient.Patient_Id, medicationId);
+                        _context.patient_Medications.Add(patientMedication);
+                    }
+                }
+
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index", "Home");
             }
-           return View(model);
+            else
+            {
+                ModelState.AddModelError("", "No patient information found.");
+            }
+
+            return View(model);
+
         }
 
-        //private async Task AddPatientInfo<T>(List<int> selectedIds, Func<int, T> createEntity) where T : class
-        //{
-        //    if(selectedIds != null && selectedIds.Any())
-        //    {
-        //        foreach(var id in selectedIds)
-        //        {
-        //            var entity = createEntity(id);
-        //            await _context.Set<T>().AddAsync(entity);
-        //        }
-        //    }
-        //}
     }
 }
