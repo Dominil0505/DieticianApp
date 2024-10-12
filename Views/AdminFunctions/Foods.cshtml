@@ -113,7 +113,7 @@
                         <div class="card mb-3">
                             <div class="card-body">
                                     <div class="row align-items-center">
-                                        <div class="col text-end dropdown">
+                                        <div class="col dropdown text-end">
                                             <a class="" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false"><i class="fa-solid fa-ellipsis"></i></a>
                                             <ul class="dropdown-menu dropdown-menu-end align-items-center">
                                                 <li>
@@ -129,7 +129,7 @@
                                             </ul>
                                         </div>
                                     </div>
-                                    <div class="card-title text-center py-2">
+                                    <div class="card-title py-2 text-center">
                                         <h5>@food.Food_Name</h5>
                                     </div>
                                 <div class="text-center">
@@ -137,12 +137,12 @@
                                             <div class="row">
                                                 <div class="mb-3">
                                             <li class="list-inline-item">
-                                                <span class="badge rounded-pill text-bg-success fs-1rem mb-2">Calorie: @food.Calorie </span>
-                                                <span class="badge rounded-pill text-bg-success fs-1rem mb-2">Protein: @food.Protein </span>
+                                                <span class="badge rounded-pill text-bg-success mb-2">Calorie: @food.Calorie </span>
+                                                <span class="badge rounded-pill text-bg-success mb-2">Protein: @food.Protein </span>
                                             </li>
                                             <li class="list-intline-item">
-                                                <span class="badge rounded-pill text-bg-success fs-1rem mb-2"> Fat: @food.Fat </span>
-                                                <span class="badge rounded-pill text-bg-success fs-1rem mb-2"> Carbohydrate: @food.Carbohydrate </span>
+                                                <span class="badge rounded-pill text-bg-success mb-2"> Fat: @food.Fat </span>
+                                                <span class="badge rounded-pill text-bg-success mb-2"> Carbohydrate: @food.Carbohydrate </span>
                                             </li>
                                             </div>
                                         </div>
@@ -151,22 +151,22 @@
                                         @if(food.FoodAllergies != null && food.FoodAllergies.Any())
                                         {
                                             <hr />
-                                            <h5>Allergies</h5>
+                                                <h5 class="badge rounded-pill text-bg-danger fs-1rem"> Allergies</h5>
                                             <ul class="list-inline">
                                                 @foreach (var item in food.FoodAllergies)
                                                 {
-                                                    <li class="list-inline-item">@item.Allergy.Allergy_Name</li>
+                                                    <li class="badge rounded-pill text-bg-danger list-inline-item">@item.Allergy.Allergy_Name</li>
                                                 }
                                             </ul>
                                         }
                                         @if(food.FoodIngredients != null && food.FoodIngredients.Any())
                                         {
                                             <hr />
-                                            <h5>Ingredients</h5>
+                                                <h5 class="badge rounded-pill text-bg-warning fs-1rem">Ingredients</h5>
                                             <ul class="list-inline">
                                                 @foreach (var item in food.FoodIngredients)
                                                 {
-                                                    <li class="list-inline-item">@item.Ingredient.Ingredient_Name</li>
+                                                    <li class="badge rounded-pill text-bg-warning list-inline-item">@item.Ingredient.Ingredient_Name</li>
                                                 }
                                             </ul>
                                         }
@@ -329,7 +329,7 @@
                 @TempData["MessageDelete"]
             }
         </div>
-        <button type="button" class="btn-close me-2 m-auto btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+        <button type="button" class="btn-close me-2 btn-close-white m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
 </div>
 
@@ -360,6 +360,6 @@
                 @TempData["MessageUpdated"]
             }
         </div>
-        <button type="button" class="btn-close me-2 m-auto btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        <button type="button" class="btn-close me-2 btn-close m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
 </div>

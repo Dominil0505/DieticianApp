@@ -32,10 +32,6 @@ public class Patients
     public virtual ICollection<Patient_Medication> PatientMedications { get; set;} = new List<Patient_Medication>();
     public virtual ICollection<Patient_Disease> PatientDiseases { get; set; } = new List<Patient_Disease>();
 
-    //public List<int> SelectedAllergies { get; set; } = new List<int>();
-    //public List<int> SelectedIngredients { get; set; } = new List<int>();
-    //public List<int> SelectedMedications { get; set; } = new List<int>();
-
     public Patients(int? user_Id)
     {
         User_Id = user_Id;

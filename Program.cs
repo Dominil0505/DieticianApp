@@ -1,4 +1,5 @@
 using DieticianApp.Data;
+using DieticianApp.MiddleWares;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using System.Composition.Hosting.Core;
@@ -30,6 +31,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+//app.UseMiddleware<ProfileCompleteMiddleware>();
 app.UseAuthorization();
 
 app.MapControllerRoute(

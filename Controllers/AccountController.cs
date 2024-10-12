@@ -25,36 +25,26 @@ namespace DieticianApp.Controllers
             _context = context;
         }
 
+        [Route("PendingPatient")]
+        public async Task<IActionResult> PendingPatient()
+        {
+            return View("Views/Patient/PendingPatient.cshtml");
+        }
+
+        [Route("Index")]
         public async Task<IActionResult> Index()
         {
-            if (User.IsInRole("Patient"))
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            var patient = await _context.Patients.Where(_ => _.User_Id == userId).FirstOrDefaultAsync();
+            if (User.IsInRole("Patient") && patient.Dietician_Id == null)
             {
-                var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-
-                var patient = await _context.Patients.Where(_ => _.User_Id == userId).FirstOrDefaultAsync();
-                
-                if(patient.Dietician_Id == null)
-                {
-                    var dietRole = await _context.Roles.FirstOrDefaultAsync(_ => _.Role_Name == "Dietician");
-                    var dietUserRole = await _context.User_Roles.FirstOrDefaultAsync(_ => _.RoleId == dietRole.Role_Id);
-
-                    var dietUser = _context.Users
-                    .Where(_ => _.User_Id == dietUserRole.UserId)
-                    .ToList();
-
-                    var model = new PendingPatientViewModel(dietUser);
-                    return View("Views/Patient/PendingPatient.cshtml", model);
-                }
-                else
-                {
-                    return View("Index", "Home");
-                }
+                return RedirectToAction(nameof(PendingPatient));
             }
             else
             {
-                return View("Index", "Home");
+                return View("Views/Home/Index.cshtml");
             }
-            
         }
 
         public IActionResult Registration()
@@ -70,22 +60,29 @@ namespace DieticianApp.Controllers
         [Authorize]
         public async Task<IActionResult> CompleteProfile()
         {
-            
-            var allergies = await _context.Allergy.ToListAsync();
-            var diseases = await _context.Diseases.ToListAsync();
-            var medicines = await _context.Medicines.ToListAsync();
-            var completedUser = await _context.Users.Where(_ => _.Is_profile_completed == false).FirstOrDefaultAsync();
-            var patients = await _context.Patients.ToListAsync();
-
-            var viewModel = new CompleteProfileViewModel
+            if (User.IsInRole("Patient"))
             {
-                Allergies = allergies ?? new List<Allergies>(),
-                Diseases = diseases ?? new List<Diseases>(),
-                Medicines = medicines ?? new List<Medicines>(),
-                Patients = patients ?? new List<Patients>()
-            };
+                var allergies = await _context.Allergy.ToListAsync();
+                var diseases = await _context.Diseases.ToListAsync();
+                var medicines = await _context.Medicines.ToListAsync();
+                var completedUser = await _context.Users.Where(_ => _.Is_profile_completed == false).FirstOrDefaultAsync();
+                var patients = await _context.Patients.ToListAsync();
 
-            return View("CompleteProfile", viewModel);
+                var viewModel = new CompleteProfileViewModel
+                {
+                    Allergies = allergies ?? new List<Allergies>(),
+                    Diseases = diseases ?? new List<Diseases>(),
+                    Medicines = medicines ?? new List<Medicines>(),
+                    Patients = patients ?? new List<Patients>()
+                };
+
+                return View("CompleteProfile", viewModel);
+            }
+            else
+            {
+                return View("Views/Home/Index.cshtml");
+            }
+            
         }
 
 
@@ -227,7 +224,7 @@ namespace DieticianApp.Controllers
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
 
-                    if(user.Is_profile_completed == true)
+                    if (user.Is_profile_completed == true)
                     {
                         return RedirectToAction(nameof(Index));
                     }
@@ -235,7 +232,6 @@ namespace DieticianApp.Controllers
                     {
                         return RedirectToAction(nameof(CompleteProfile));
                     }
-                    
 
                 }
                 else
@@ -306,7 +302,7 @@ namespace DieticianApp.Controllers
                 }
 
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction(nameof(Index));
             }
             else
             {

@@ -101,42 +101,5 @@ namespace DieticianApp.Controllers
 
             return View(model);
         }
-
-        
-        //[Authorize]
-        //[HttpPost]
-        //public async Task<IActionResult> CompleteProfile(CompleteProfileViewModel model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var userEmail = User.FindFirstValue(ClaimTypes.Email);
-        //        var user = await _context.Users.Where(_ => _.Email == userEmail).FirstOrDefaultAsync();
-
-        //        if (user != null && ) {
-        //            try
-        //            {
-        //                Patients patient = new Patients(model.DoB, model.Height, model.Weight, model.Gender);
-
-        //                user.Patients = patient;
-        //                await _context.Patients.AddAsync(patient);
-
-        //                if(model.SelectedDiseases != null && model.SelectedDiseases.Any())
-        //                {
-                            
-        //                }
-
-        //                await _context.SaveChangesAsync();
-        //            }
-        //            catch (DbUpdateException e)
-        //            {
-        //                ModelState.AddModelError("", $"Something went wrong, error: {e.Message}");
-        //            }
-                    
-                    
-        //        }
-        //    }
-
-        //    return View(model);
-        //}
     }
 }

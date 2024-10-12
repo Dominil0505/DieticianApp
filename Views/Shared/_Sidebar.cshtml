@@ -1,32 +1,6 @@
-﻿@* @if (User.IsInRole("Patient"))
-{
-    <div class="customsidenav">
-        <a href="#about"><img width="50" height="50" src="https://img.icons8.com/external-flatart-icons-lineal-color-flatarticons/64/external-diet-diet-and-nutrition-flatart-icons-lineal-color-flatarticons-1.png" alt="external-diet-diet-and-nutrition-flatart-icons-lineal-color-flatarticons-1" />Diet</a>
-    </div>
-}
-
-@if (User.IsInRole("Admin"))
-{
-    <div class="customsidenav">
-        <a href="#about"><img width="48" height="48" src="https://img.icons8.com/color/48/user.png" alt="user" /> Patients</a>
-        <a href=""> <img width="48" height="48" src="https://img.icons8.com/color/48/carrot.png" alt="carrot" /> Foods</a>
-        <a asp-controller="AdminFunctions" asp-action="Allergy"><img width="40" height="40" src="https://img.icons8.com/office/40/no-nuts.png" alt="no-nuts" /> Allergies</a>
-        <a href=""><img width="48" height="48" src="https://img.icons8.com/color/48/flour-in-paper-packaging.png" alt="flour-in-paper-packaging" /> Ingredients</a>
-    </div>
-}
-
-@if (User.IsInRole("Dietician"))
-{
-    <div class="customsidenav">
-        <a href="#about">Diet</a>
-    </div>
-}
- *@
-
-    <!-- Sidebar scroll-->
-    <div>
+﻿    <div>
         <div class="brand-logo d-flex align-items-center justify-content-between">
-            <a href="./index.html" class="text-nowrap logo-img">
+            <a href="./index.html" class="logo-img text-nowrap">
                 <img src="../assets/images/logos/dark-logo.svg" width="180" alt="">
             </a>
             <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">

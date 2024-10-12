@@ -8,7 +8,7 @@ namespace DieticianApp.Models.ViewModel.Patient
 
         public PendingPatientViewModel(List<Users> users)
         {
-            Users = users ?? new List<Users>();
+            Users = users;
         }
     }
 }

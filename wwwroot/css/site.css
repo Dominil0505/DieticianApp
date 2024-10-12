@@ -106,3 +106,8 @@ textarea.form-control:focus {
 .bx-shadow {
     box-shadow: 0 .25rem .75rem 0 rgba(34, 48, 62, .14);
 }
+
+.text-bg-warning {
+    color: #fff !important;
+    background-color: #f58700 !important;
+}
